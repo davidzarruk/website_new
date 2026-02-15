@@ -48,7 +48,7 @@ const talks: Talk[] = [
     talkKey: "pasc-2019",
     location: "Zurich, Switzerland",
     year: "2019",
-    role: "Panelist",
+    role: "Presenter",
   },
 ];
 
