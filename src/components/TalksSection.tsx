@@ -21,6 +21,7 @@ const talks: Talk[] = [
     talkKey: "workshop-2025",
     location: "Porto, Portugal",
     year: "2025",
+    role: "Presenter",
   },
   {
     title: "Keynote Speaker",
