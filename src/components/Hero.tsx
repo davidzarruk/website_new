@@ -35,7 +35,7 @@ const Hero = () => {
           <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground leading-tight">
             David Zarruk
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-lg">
+          <p className="text-muted-foreground leading-relaxed max-w-lg">
             Senior Economist at{" "}
             <a href="https://www.amazon.com/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
               Amazon
