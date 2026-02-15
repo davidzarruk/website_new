@@ -53,7 +53,45 @@ const DataRunnerSection = () => {
           ))}
         </motion.div>
 
-        {/* Race Results */}
+        {/* Berlin Marathon AI Card */}
+        <motion.div
+          className="mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+        >
+          <a
+            href="/berlin"
+            className="group block rounded-xl border border-border bg-card p-6 hover:border-accent/40 transition-colors"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <span className="text-3xl">🏃‍♂️</span>
+                <div>
+                  <h3 className="font-heading text-lg text-foreground group-hover:text-accent transition-colors">
+                    Berlin Marathon AI
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Ask anything about the Berlin Marathon — powered by AI
+                  </p>
+                </div>
+              </div>
+              <svg
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                className="text-muted-foreground group-hover:text-accent transition-colors"
+              >
+                <path d="M7 17L17 7M17 7H7M17 7v10" />
+              </svg>
+            </div>
+          </a>
+        </motion.div>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
