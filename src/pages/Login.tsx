@@ -7,7 +7,8 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { signIn } = useAuth();
+  const [isSignUp, setIsSignUp] = useState(false);
+  const { signIn, signUp } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -15,11 +16,20 @@ const Login = () => {
     setError("");
     setLoading(true);
 
-    const { error } = await signIn(email, password);
-    if (error) {
-      setError("Invalid email or password");
+    if (isSignUp) {
+      const { error } = await signUp(email, password);
+      if (error) {
+        setError(error.message);
+      } else {
+        navigate("/private");
+      }
     } else {
-      navigate("/private");
+      const { error } = await signIn(email, password);
+      if (error) {
+        setError("Invalid email or password");
+      } else {
+        navigate("/private");
+      }
     }
     setLoading(false);
   };
@@ -28,7 +38,9 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-background px-6">
       <div className="w-full max-w-sm space-y-8">
         <div className="text-center">
-          <h1 className="font-heading text-3xl text-foreground">Sign In</h1>
+          <h1 className="font-heading text-3xl text-foreground">
+            {isSignUp ? "Sign Up" : "Sign In"}
+          </h1>
           <p className="text-sm text-muted-foreground mt-2">
             Private access only
           </p>
@@ -74,12 +86,21 @@ const Login = () => {
             disabled={loading}
             className="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-50"
           >
-            {loading ? "Signing in..." : "Sign In"}
+            {loading
+              ? isSignUp ? "Creating account..." : "Signing in..."
+              : isSignUp ? "Sign Up" : "Sign In"}
           </button>
         </form>
 
-        <div className="text-center">
-          <a href="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+        <div className="space-y-3 text-center">
+          <button
+            type="button"
+            onClick={() => { setIsSignUp(!isSignUp); setError(""); }}
+            className="w-full text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            {isSignUp ? "Already have an account? Sign In" : "Need an account? Sign Up"}
+          </button>
+          <a href="/" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">
             ← Back to site
           </a>
         </div>
