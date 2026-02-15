@@ -54,8 +54,11 @@ const MaterialsUploader = () => {
     if (!files || files.length === 0) return;
     setUploading(true);
 
-    try {
-      for (const file of Array.from(files)) {
+    let successCount = 0;
+    let failCount = 0;
+
+    for (const file of Array.from(files)) {
+      try {
         const filePath = `${selectedCard}/${file.name}`;
 
         const { error: uploadError } = await supabase.storage
@@ -72,16 +75,18 @@ const MaterialsUploader = () => {
         });
 
         if (dbError) throw dbError;
+        successCount++;
+      } catch (err: any) {
+        failCount++;
+        console.error(`Failed to upload ${file.name}:`, err.message);
       }
-
-      toast.success(`${files.length} file(s) uploaded`);
-      fetchMaterials();
-    } catch (err: any) {
-      toast.error(err.message || "Upload failed");
-    } finally {
-      setUploading(false);
-      e.target.value = "";
     }
+
+    if (successCount > 0) toast.success(`${successCount} file(s) uploaded`);
+    if (failCount > 0) toast.error(`${failCount} file(s) failed to upload`);
+    fetchMaterials();
+    setUploading(false);
+    e.target.value = "";
   };
 
   const handleDelete = async (material: MaterialRecord) => {
