@@ -7,11 +7,11 @@ const instagramPosts = [
 ];
 
 const raceResults = [
-  { race: "Berlin Marathon", year: "2024", time: "3:45:12", location: "Berlin, Germany" },
-  { race: "Bogotá Half Marathon", year: "2024", time: "1:38:45", location: "Bogotá, Colombia" },
-  { race: "Chicago Marathon", year: "2023", time: "3:52:30", location: "Chicago, USA" },
-  { race: "Mexico City Marathon", year: "2022", time: "3:58:10", location: "Mexico City, Mexico" },
-  { race: "Medellín Half Marathon", year: "2022", time: "1:42:20", location: "Medellín, Colombia" },
+  { race: "Maratón de Chicago", year: "2024", time: "2:44:53", location: "Chicago, USA" },
+  { race: "Media Maratón de Bogotá", year: "2024", time: "1:20:26", location: "Bogotá, Colombia" },
+  { race: "Maratón de Nueva York", year: "2023", time: "2:53:20", location: "New York, USA" },
+  { race: "Media Maratón de Nueva York", year: "2022", time: "1:18:07", location: "New York, USA" },
+  { race: "Maratón de Berlín", year: "2021", time: "3:03:27", location: "Berlin, Germany" },
 ];
 
 const DataRunnerSection = () => {
