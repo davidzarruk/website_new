@@ -17,6 +17,7 @@ const talks: Talk[] = [
   {
     title: "Workshop Presenter",
     event: "Speeding Up Empirical Research: Tools and Techniques for Fast Computing (Banco de Portugal)",
+    eventUrl: "https://www.bportugal.pt/en/evento/workshop-speeding-empirical-research-tools-and-techniques-fast-computing-bplim",
     talkKey: "workshop-2025",
     location: "Porto, Portugal",
     year: "2025",
