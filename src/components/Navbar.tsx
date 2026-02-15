@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
   { label: "About", href: "#about" },
@@ -10,6 +11,7 @@ const navItems = [
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -50,6 +52,18 @@ const Navbar = () => {
               className="text-sm font-medium text-accent hover:text-accent/80 transition-colors"
             >
               CV ↗
+            </a>
+          </li>
+          <li>
+            <a
+              href={user ? "/private" : "/login"}
+              className="text-muted-foreground/40 hover:text-muted-foreground transition-colors"
+              aria-label={user ? "Private area" : "Sign in"}
+            >
+              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <rect x="3" y="11" width="18" height="11" rx="2" />
+                <path d="M7 11V7a5 5 0 0110 0v4" />
+              </svg>
             </a>
           </li>
         </ul>
