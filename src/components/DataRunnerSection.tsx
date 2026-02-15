@@ -31,21 +31,9 @@ const DataRunnerSection = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="font-heading text-3xl md:text-4xl text-foreground mb-2">
+          <h2 className="font-heading text-3xl md:text-4xl text-foreground mb-10">
             DataRunner
           </h2>
-          <p className="text-muted-foreground mb-10 max-w-xl">
-            Where data science meets running culture. Follow the journey on{" "}
-            <a
-              href="https://www.instagram.com/datarunnerco/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-accent hover:underline font-medium"
-            >
-              @datarunnerco
-            </a>
-            .
-          </p>
         </motion.div>
 
         {/* Instagram Feed */}
