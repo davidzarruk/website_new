@@ -143,12 +143,21 @@ const MaterialsUploader = () => {
               >
                 {mat.display_label || mat.file_name}
               </a>
-              <button
-                onClick={() => handleDelete(mat)}
-                className="text-xs text-destructive hover:underline shrink-0"
-              >
-                Delete
-              </button>
+              <div className="flex items-center gap-2 shrink-0">
+                <a
+                  href={getPublicUrl(mat.file_path)}
+                  download
+                  className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  ↓ Download
+                </a>
+                <button
+                  onClick={() => handleDelete(mat)}
+                  className="text-xs text-destructive hover:underline"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           ))}
         </div>
