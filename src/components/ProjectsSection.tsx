@@ -1,16 +1,5 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
-import { ChevronDown } from "lucide-react";
-
-interface ResourceLink {
-  label: string;
-  url: string;
-}
-
-interface ResourceGroup {
-  title: string;
-  links: ResourceLink[];
-}
+import ExpandableGroup, { type ResourceGroup, type ResourceLink } from "./ExpandableGroup";
 
 interface Project {
   title: string;
@@ -23,12 +12,14 @@ interface Project {
     authors: { name: string; url: string }[];
   };
   otherLinks?: ResourceLink[];
+  wide?: boolean;
 }
 
 const projects: Project[] = [
   {
     title: "Notes on Computational Methods for Economists",
     description: "",
+    wide: true,
     coauthors: {
       text: "with",
       authors: [
@@ -115,50 +106,12 @@ const projects: Project[] = [
   },
 ];
 
-const ResourceGroupCard = ({ group }: { group: ResourceGroup }) => {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <div className="border-t border-border pt-3">
-      <button
-        onClick={() => setOpen(!open)}
-        className="flex items-center justify-between w-full text-left text-sm font-medium text-foreground hover:text-accent transition-colors"
-      >
-        <span>{group.title}</span>
-        <ChevronDown
-          className={`w-4 h-4 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`}
-        />
-      </button>
-      {open && (
-        <ul className="mt-2 space-y-1.5 pl-1">
-          {group.links.map((link) => (
-            <li key={link.url}>
-              <a
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-muted-foreground hover:text-accent transition-colors flex items-center gap-1.5"
-              >
-                <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
-                  <polyline points="14,2 14,8 20,8" />
-                </svg>
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-};
-
 const container = {
   hidden: {},
   show: { transition: { staggerChildren: 0.08 } },
 };
 
-const item = {
+const itemVariant = {
   hidden: { opacity: 0, y: 20 },
   show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
@@ -178,7 +131,7 @@ const ProjectsSection = () => {
         </motion.h2>
 
         <motion.div
-          className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+          className="grid gap-6 md:grid-cols-2"
           variants={container}
           initial="hidden"
           whileInView="show"
@@ -187,21 +140,16 @@ const ProjectsSection = () => {
           {projects.map((project) => (
             <motion.div
               key={project.title}
-              variants={item}
+              variants={itemVariant}
               className={`group rounded-xl bg-background p-6 border border-border hover:border-accent/40 transition-all hover:shadow-md ${
-                project.resources ? "md:col-span-2 lg:col-span-2" : ""
+                project.wide ? "md:col-span-2" : ""
               }`}
             >
-              <h3 className="font-heading text-lg text-foreground mb-2">
+              <h3 className="font-heading text-lg text-foreground mb-1">
                 {project.title}
               </h3>
-              {project.description && (
-                <p className="text-sm text-muted-foreground leading-relaxed mb-3">
-                  {project.description}
-                </p>
-              )}
               {project.coauthors && (
-                <p className="text-sm text-muted-foreground mb-4">
+                <p className="text-sm text-muted-foreground mb-3">
                   ({project.coauthors.text}{" "}
                   {project.coauthors.authors.map((a, i) => (
                     <span key={a.name}>
@@ -209,6 +157,11 @@ const ProjectsSection = () => {
                       {i < project.coauthors!.authors.length - 1 ? " and " : ""}
                     </span>
                   ))})
+                </p>
+              )}
+              {project.description && (
+                <p className="text-sm text-muted-foreground leading-relaxed mb-3">
+                  {project.description}
                 </p>
               )}
               <div className="flex flex-wrap gap-2 mb-4">
@@ -238,7 +191,7 @@ const ProjectsSection = () => {
               {project.resources && (
                 <div className="space-y-3 mt-2">
                   {project.resources.map((group) => (
-                    <ResourceGroupCard key={group.title} group={group} />
+                    <ExpandableGroup key={group.title} group={group} />
                   ))}
                 </div>
               )}
