@@ -5,6 +5,7 @@ interface Talk {
   event: string;
   location: string;
   year: string;
+  eventUrl?: string;
   role?: string;
   slidesUrl?: string;
 }
@@ -13,6 +14,7 @@ const talks: Talk[] = [
   {
     title: "Keynote Speaker",
     event: "International Conference on Machine Learning (ICML) — Latin x AI",
+    eventUrl: "https://www.latinxinai.org/icml-2024?srsltid=AfmBOoqkqdwA1ApdiZeV_9ENQUIfbGXeIFVynT5hcwj8gA3ir636d-SA",
     location: "Vienna, Austria",
     year: "2024",
     role: "Keynote speaker",
@@ -20,6 +22,7 @@ const talks: Talk[] = [
   {
     title: "Keynote Speaker",
     event: "Symposium on Statistical Challenges in Electronic Commerce Research",
+    eventUrl: "https://web.archive.org/web/20230925101827/https://scecr.com/program-2/",
     location: "Bogotá, Colombia",
     year: "2023",
     role: "Keynote speaker",
@@ -27,6 +30,7 @@ const talks: Talk[] = [
   {
     title: "High Performance Computing Panel",
     event: "Platform for Advanced Scientific Computing (PASC) Conference",
+    eventUrl: "https://pasc19.pasc-conference.org/",
     location: "Zurich, Switzerland",
     year: "2019",
     role: "Panelist",
@@ -78,7 +82,13 @@ const TalksSection = () => {
             >
               <div className="flex items-start justify-between gap-3 mb-2">
                 <h3 className="font-heading text-lg text-foreground leading-snug">
-                  {talk.event}
+                  {talk.eventUrl ? (
+                    <a href={talk.eventUrl} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
+                      {talk.event}
+                    </a>
+                  ) : (
+                    talk.event
+                  )}
                 </h3>
                 <span className="shrink-0 text-sm text-muted-foreground font-medium">
                   {talk.year}
