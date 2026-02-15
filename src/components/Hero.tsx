@@ -35,7 +35,7 @@ const Hero = () => {
           <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground leading-tight">
             David Zarruk
           </h1>
-          <p className="text-muted-foreground leading-relaxed max-w-lg">
+          <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-lg">
             Senior Economist at{" "}
             <a href="https://www.amazon.com/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
               Amazon
@@ -46,7 +46,7 @@ const Hero = () => {
             </a>
             , specializing in causal inference and machine learning at scale.
           </p>
-          <p className="text-muted-foreground leading-relaxed max-w-lg">
+          <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-lg">
             Previously, VP of Data Science at{" "}
             <a href="https://www.rappibank.com/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
               RappiBank
@@ -61,7 +61,7 @@ const Hero = () => {
             </a>{" "}
             in Colombia.
           </p>
-          <p className="text-muted-foreground leading-relaxed max-w-lg">
+          <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-lg">
             Marathon runner (2:44 PR) and creator of{" "}
             <a href="https://www.instagram.com/datarunnerco/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
               @datarunnerco
