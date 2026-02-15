@@ -40,7 +40,7 @@ const Hero = () => {
             <a href="https://www.amazon.com/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
               Amazon
             </a>
-            . I also teach at the Industrial Engineering Department at{" "}
+            . I also teach at{" "}
             <a href="https://uniandes.edu.co/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
               Universidad de los Andes
             </a>{" "}
