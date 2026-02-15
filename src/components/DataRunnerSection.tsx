@@ -6,13 +6,6 @@ const instagramPosts = [
   "https://www.instagram.com/p/DIxFz6qpDA_/",
 ];
 
-const stats = [
-  { label: "Marathons", value: "5" },
-  { label: "Half Marathons", value: "8" },
-  { label: "Countries Raced", value: "4" },
-  { label: "Total km", value: "3,200+" },
-];
-
 const raceResults = [
   { race: "Berlin Marathon", year: "2024", time: "3:45:12", location: "Berlin, Germany" },
   { race: "Bogotá Half Marathon", year: "2024", time: "1:38:45", location: "Bogotá, Colombia" },
@@ -60,31 +53,12 @@ const DataRunnerSection = () => {
           ))}
         </motion.div>
 
-        {/* Stats */}
-        <motion.div
-          className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          {stats.map((stat) => (
-            <div
-              key={stat.label}
-              className="rounded-xl border border-border bg-card p-6 text-center"
-            >
-              <p className="font-heading text-3xl text-accent mb-1">{stat.value}</p>
-              <p className="text-sm text-muted-foreground">{stat.label}</p>
-            </div>
-          ))}
-        </motion.div>
-
         {/* Race Results */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
         >
           <h3 className="font-heading text-2xl text-foreground mb-6">Race Results</h3>
           <div className="rounded-xl border border-border bg-card overflow-hidden">
@@ -122,7 +96,7 @@ const DataRunnerSection = () => {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
         >
           <a
             href="https://www.instagram.com/datarunnerco/"
