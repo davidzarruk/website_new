@@ -14,7 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      talk_slides: {
+        Row: {
+          file_name: string
+          file_path: string
+          id: string
+          talk_key: string
+          uploaded_at: string
+        }
+        Insert: {
+          file_name: string
+          file_path: string
+          id?: string
+          talk_key: string
+          uploaded_at?: string
+        }
+        Update: {
+          file_name?: string
+          file_path?: string
+          id?: string
+          talk_key?: string
+          uploaded_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

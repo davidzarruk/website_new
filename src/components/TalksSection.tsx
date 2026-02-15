@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Talk {
   title: string;
@@ -8,6 +10,7 @@ interface Talk {
   eventUrl?: string;
   role?: string;
   slidesUrl?: string;
+  talkKey: string;
 }
 
 const talks: Talk[] = [
@@ -15,6 +18,7 @@ const talks: Talk[] = [
     title: "Keynote Speaker",
     event: "International Conference on Machine Learning (ICML) — Latin x AI",
     eventUrl: "https://www.latinxinai.org/icml-2024?srsltid=AfmBOoqkqdwA1ApdiZeV_9ENQUIfbGXeIFVynT5hcwj8gA3ir636d-SA",
+    talkKey: "icml-2024",
     location: "Vienna, Austria",
     year: "2024",
     role: "Keynote speaker",
@@ -23,6 +27,7 @@ const talks: Talk[] = [
     title: "Keynote Speaker",
     event: "Symposium on Statistical Challenges in Electronic Commerce Research",
     eventUrl: "https://web.archive.org/web/20230925101827/https://scecr.com/program-2/",
+    talkKey: "scecr-2023",
     location: "Bogotá, Colombia",
     year: "2023",
     role: "Keynote speaker",
@@ -31,6 +36,7 @@ const talks: Talk[] = [
     title: "High Performance Computing Panel",
     event: "Platform for Advanced Scientific Computing (PASC) Conference",
     eventUrl: "https://pasc19.pasc-conference.org/",
+    talkKey: "pasc-2019",
     location: "Zurich, Switzerland",
     year: "2019",
     role: "Panelist",
@@ -38,6 +44,7 @@ const talks: Talk[] = [
   {
     title: "Workshop Presenter",
     event: "Speeding Up Empirical Research: Tools and Techniques for Fast Computing",
+    talkKey: "workshop-2025",
     location: "Porto, Portugal",
     year: "2025",
   },
@@ -54,6 +61,23 @@ const itemVariant = {
 };
 
 const TalksSection = () => {
+  const [slideUrls, setSlideUrls] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    const fetchSlides = async () => {
+      const { data } = await supabase.from("talk_slides").select("talk_key, file_path");
+      if (data) {
+        const urls: Record<string, string> = {};
+        for (const row of data as { talk_key: string; file_path: string }[]) {
+          const { data: urlData } = supabase.storage.from("talk-slides").getPublicUrl(row.file_path);
+          urls[row.talk_key] = urlData.publicUrl;
+        }
+        setSlideUrls(urls);
+      }
+    };
+    fetchSlides();
+  }, []);
+
   return (
     <section id="talks" className="py-24 px-6 bg-secondary/40">
       <div className="mx-auto max-w-5xl">
@@ -105,9 +129,9 @@ const TalksSection = () => {
                 📍 {talk.location}
               </p>
 
-              {talk.slidesUrl ? (
+              {slideUrls[talk.talkKey] ? (
                 <a
-                  href={talk.slidesUrl}
+                  href={slideUrls[talk.talkKey]}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 text-sm font-medium text-accent hover:underline"
