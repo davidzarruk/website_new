@@ -40,15 +40,11 @@ const Hero = () => {
             <a href="https://www.amazon.com/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
               Amazon
             </a>
-            . I also teach at{" "}
-            <a href="https://uniandes.edu.co/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
-              Universidad de los Andes
-            </a>{" "}
-            in Colombia. I also create data & running content on{" "}
-            <a href="https://www.instagram.com/datarunnerco/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
-              @datarunnerco
+            , where I work on causal ML systems for inventory optimization across 20+ countries. Economist and mathematician with a Ph.D. from the{" "}
+            <a href="https://www.upenn.edu/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
+              University of Pennsylvania
             </a>
-            .
+            , specializing in causal inference and machine learning at scale.
           </p>
           <p className="text-muted-foreground leading-relaxed max-w-lg">
             Previously, VP of Data Science at{" "}
@@ -59,7 +55,18 @@ const Hero = () => {
             <a href="https://www.itam.mx/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
               ITAM
             </a>
-            .
+            . I also teach at{" "}
+            <a href="https://uniandes.edu.co/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
+              Universidad de los Andes
+            </a>{" "}
+            in Colombia.
+          </p>
+          <p className="text-muted-foreground leading-relaxed max-w-lg">
+            Marathon runner (2:44 PR) and creator of{" "}
+            <a href="https://www.instagram.com/datarunnerco/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
+              @datarunnerco
+            </a>
+            , where I share about data science and endurance sports.
           </p>
 
           <div className="flex flex-wrap gap-3 pt-2">
