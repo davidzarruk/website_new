@@ -164,6 +164,18 @@ const ProjectsSection = () => {
                   {project.description}
                 </p>
               )}
+              {project.tags && project.tags.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {project.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-xs rounded-full bg-secondary px-3 py-1 text-secondary-foreground font-medium"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
               {project.link && (
                 <a
                   href={project.link.url}
