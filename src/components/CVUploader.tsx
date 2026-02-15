@@ -34,7 +34,7 @@ const CVUploader = () => {
       }
       const { error } = await supabase.storage.from("cv").upload(file.name, file, { upsert: true });
       if (error) throw error;
-      toast.success("CV uploaded successfully");
+      toast.success("Resume uploaded successfully");
       fetchCV();
     } catch (err: any) {
       toast.error(err.message || "Upload failed");
@@ -47,18 +47,18 @@ const CVUploader = () => {
   const handleDelete = async () => {
     if (!currentCV) return;
     await supabase.storage.from("cv").remove([currentCV]);
-    toast.success("CV deleted");
+    toast.success("Resume deleted");
     setCurrentCV(null);
     setCvUrl(null);
   };
 
   return (
     <div className="rounded-xl bg-card p-6 border border-border">
-      <h2 className="font-heading text-xl text-foreground mb-4">CV / Resume</h2>
+      <h2 className="font-heading text-xl text-foreground mb-4">Resume</h2>
 
       <div className="flex items-center gap-3 mb-4">
         <label className="inline-flex items-center gap-2 rounded-lg bg-accent/10 text-accent px-4 py-2 text-sm font-medium cursor-pointer hover:bg-accent/20 transition-colors">
-          {uploading ? "Uploading…" : "Upload CV"}
+          {uploading ? "Uploading…" : "Upload Resume"}
           <input
             type="file"
             accept=".pdf,.doc,.docx"
@@ -84,7 +84,7 @@ const CVUploader = () => {
           </button>
         </div>
       ) : (
-        <p className="text-sm text-muted-foreground">No CV uploaded yet.</p>
+        <p className="text-sm text-muted-foreground">No resume uploaded yet.</p>
       )}
     </div>
   );
