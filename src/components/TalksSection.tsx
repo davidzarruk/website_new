@@ -15,6 +15,13 @@ interface Talk {
 
 const talks: Talk[] = [
   {
+    title: "Workshop Presenter",
+    event: "Speeding Up Empirical Research: Tools and Techniques for Fast Computing",
+    talkKey: "workshop-2025",
+    location: "Porto, Portugal",
+    year: "2025",
+  },
+  {
     title: "Keynote Speaker",
     event: "International Conference on Machine Learning (ICML) — Latin x AI",
     eventUrl: "https://www.latinxinai.org/icml-2024?srsltid=AfmBOoqkqdwA1ApdiZeV_9ENQUIfbGXeIFVynT5hcwj8gA3ir636d-SA",
@@ -40,13 +47,6 @@ const talks: Talk[] = [
     location: "Zurich, Switzerland",
     year: "2019",
     role: "Panelist",
-  },
-  {
-    title: "Workshop Presenter",
-    event: "Speeding Up Empirical Research: Tools and Techniques for Fast Computing",
-    talkKey: "workshop-2025",
-    location: "Porto, Portugal",
-    year: "2025",
   },
 ];
 
