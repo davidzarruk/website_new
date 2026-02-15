@@ -18,49 +18,57 @@ interface Project {
   tags: string[];
   link?: { label: string; url: string };
   resources?: ResourceGroup[];
+  coauthors?: {
+    text: string;
+    authors: { name: string; url: string }[];
+  };
+  otherLinks?: ResourceLink[];
 }
 
 const projects: Project[] = [
   {
-    title: "High-Performance Computing",
-    description:
-      "Notes on computational methods for economists (with Jesús Fernández-Villaverde and Pablo Guerrón-Quintana). Parallel and GPU computing applied to structural models.",
+    title: "Notes on Computational Methods for Economists",
+    description: "",
+    coauthors: {
+      text: "with",
+      authors: [
+        { name: "Jesús Fernández-Villaverde", url: "https://www.sas.upenn.edu/~jesusfv/" },
+        { name: "Pablo Guerrón-Quintana", url: "https://sites.google.com/site/pabloaguerronquintana/" },
+      ],
+    },
     tags: ["CUDA", "MPI", "Julia", "C++"],
     link: {
       label: "GitHub Repository",
       url: "https://github.com/davidzarruk/Parallel_Computing",
     },
+    otherLinks: [
+      { label: "Rcpp Slides — Federal Reserve Bank of San Francisco (2017)", url: "https://www.davidzarruk.com/files/Zarruk_Rcpp_FRBSF.pdf" },
+    ],
     resources: [
       {
-        title: "High-Performance Computing in Economics",
+        title: "High-performance computing in Economics",
         links: [
-          { label: "HPC in Economics", url: "https://www.davidzarruk.com/files/Computation/Lecture_HPC_1_HPC_Economics.pdf" },
-          { label: "Software Engineering", url: "https://www.davidzarruk.com/files/Computation/Lecture_HPC_2_Software_Engineering.pdf" },
-          { label: "OS and Basic Utilities", url: "https://www.davidzarruk.com/files/Computation/Lecture_HPC_3_OS_Basic_Utilities.pdf" },
-          { label: "Programming Languages Concepts", url: "https://www.davidzarruk.com/files/Computation/Lecture_HPC_4_Programming_Languages_Concepts.pdf" },
-          { label: "Scientific Computing Languages", url: "https://www.davidzarruk.com/files/Computation/Lecture_HPC_5_Scientific_Computing_Languages.pdf" },
-          { label: "Coding Tools", url: "https://www.davidzarruk.com/files/Computation/Lecture_HPC_6_Coding_Tools.pdf" },
-          { label: "Programming Paradigms", url: "https://www.davidzarruk.com/files/Computation/Lecture_HPC_7_Programming_Paradigms.pdf" },
-          { label: "Elements of Programming Style", url: "https://www.davidzarruk.com/files/Computation/Lecture_HPC_8_Elements_Programming_Style.pdf" },
-          { label: "Data Handling", url: "https://www.davidzarruk.com/files/Computation/Lecture_HPC_9_Data_Handling.pdf" },
-          { label: "Web Scraping", url: "https://www.davidzarruk.com/files/Computation/Lecture_HPC_10_Web_Scrapping.pdf" },
-          { label: "Parallel Programming", url: "https://www.davidzarruk.com/files/Computation/Lecture_HPC_11_Parallelization.pdf" },
+          { label: "High-performance computing in Economics", url: "https://www.davidzarruk.com/files/Computation/Lecture_HPC_1_HPC_Economics.pdf" },
+          { label: "Software engineering", url: "https://www.davidzarruk.com/files/Computation/Lecture_HPC_2_Software_Engineering.pdf" },
+          { label: "OS and basic utilities", url: "https://www.davidzarruk.com/files/Computation/Lecture_HPC_3_OS_Basic_Utilities.pdf" },
+          { label: "Concepts on programming languages", url: "https://www.davidzarruk.com/files/Computation/Lecture_HPC_4_Programming_Languages_Concepts.pdf" },
+          { label: "Scientific computing languages", url: "https://www.davidzarruk.com/files/Computation/Lecture_HPC_5_Scientific_Computing_Languages.pdf" },
+          { label: "Coding tools", url: "https://www.davidzarruk.com/files/Computation/Lecture_HPC_6_Coding_Tools.pdf" },
+          { label: "Programming paradigms", url: "https://www.davidzarruk.com/files/Computation/Lecture_HPC_7_Programming_Paradigms.pdf" },
+          { label: "The elements of programming style", url: "https://www.davidzarruk.com/files/Computation/Lecture_HPC_8_Elements_Programming_Style.pdf" },
+          { label: "Data handling", url: "https://www.davidzarruk.com/files/Computation/Lecture_HPC_9_Data_Handling.pdf" },
+          { label: "Web scraping", url: "https://www.davidzarruk.com/files/Computation/Lecture_HPC_10_Web_Scrapping.pdf" },
+          { label: "Parallel programming", url: "https://www.davidzarruk.com/files/Computation/Lecture_HPC_11_Parallelization.pdf" },
         ],
       },
       {
-        title: "Perturbation Methods",
+        title: "Perturbation",
         links: [
-          { label: "I: Basic Results", url: "https://www.davidzarruk.com/files/Computation/Lecture_SM_5_Perturbation_I.pdf" },
-          { label: "II: General Case", url: "https://www.davidzarruk.com/files/Computation/Lecture_SM_6_Perturbation_II.pdf" },
-          { label: "III: Change of Variables", url: "https://www.davidzarruk.com/files/Computation/Lecture_SM_7_Perturbation_III.pdf" },
-          { label: "IV: Perturbing the Value Function", url: "https://www.davidzarruk.com/files/Computation/Lecture_SM_8_Perturbation_IV.pdf" },
-          { label: "V: Pruning", url: "https://www.davidzarruk.com/files/Computation/Lecture_SM_9_Perturbation_V.pdf" },
-        ],
-      },
-      {
-        title: "Other Resources",
-        links: [
-          { label: "Rcpp Slides — Federal Reserve Bank of San Francisco (2017)", url: "https://www.davidzarruk.com/files/Zarruk_Rcpp_FRBSF.pdf" },
+          { label: "Perturbation methods I: basic results", url: "https://www.davidzarruk.com/files/Computation/Lecture_SM_5_Perturbation_I.pdf" },
+          { label: "Perturbation methods II: general case", url: "https://www.davidzarruk.com/files/Computation/Lecture_SM_6_Perturbation_II.pdf" },
+          { label: "Perturbation methods III: change of variables", url: "https://www.davidzarruk.com/files/Computation/Lecture_SM_7_Perturbation_III.pdf" },
+          { label: "Perturbation methods IV: perturbing the value function", url: "https://www.davidzarruk.com/files/Computation/Lecture_SM_8_Perturbation_IV.pdf" },
+          { label: "Perturbation methods V: pruning", url: "https://www.davidzarruk.com/files/Computation/Lecture_SM_9_Perturbation_V.pdf" },
         ],
       },
     ],
@@ -187,9 +195,22 @@ const ProjectsSection = () => {
               <h3 className="font-heading text-lg text-foreground mb-2">
                 {project.title}
               </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                {project.description}
-              </p>
+              {project.description && (
+                <p className="text-sm text-muted-foreground leading-relaxed mb-3">
+                  {project.description}
+                </p>
+              )}
+              {project.coauthors && (
+                <p className="text-sm text-muted-foreground mb-4">
+                  ({project.coauthors.text}{" "}
+                  {project.coauthors.authors.map((a, i) => (
+                    <span key={a.name}>
+                      <a href={a.url} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">{a.name}</a>
+                      {i < project.coauthors!.authors.length - 1 ? " and " : ""}
+                    </span>
+                  ))})
+                </p>
+              )}
               <div className="flex flex-wrap gap-2 mb-4">
                 {project.tags.map((tag) => (
                   <span
@@ -219,6 +240,25 @@ const ProjectsSection = () => {
                   {project.resources.map((group) => (
                     <ResourceGroupCard key={group.title} group={group} />
                   ))}
+                </div>
+              )}
+
+              {project.otherLinks && project.otherLinks.length > 0 && (
+                <div className="border-t border-border pt-3 mt-3">
+                  <p className="text-sm font-medium text-foreground mb-2">Other:</p>
+                  <ul className="space-y-1.5 pl-1">
+                    {project.otherLinks.map((ol) => (
+                      <li key={ol.url}>
+                        <a href={ol.url} target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-accent transition-colors flex items-center gap-1.5">
+                          <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                            <polyline points="14,2 14,8 20,8" />
+                          </svg>
+                          {ol.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               )}
             </motion.div>
