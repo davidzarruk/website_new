@@ -132,12 +132,17 @@ const SlideUploader = () => {
                     {slide.file_name}
                   </a>
                 </div>
-                <button
-                  onClick={() => handleDelete(slide)}
-                  className="text-xs text-destructive hover:underline"
-                >
-                  Delete
-                </button>
+                <div className="flex items-center gap-2 shrink-0">
+                  <a href={getPublicUrl(slide.file_path)} download className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+                    ↓ Download
+                  </a>
+                  <button
+                    onClick={() => handleDelete(slide)}
+                    className="text-xs text-destructive hover:underline"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             );
           })}

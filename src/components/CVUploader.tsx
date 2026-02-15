@@ -79,9 +79,14 @@ const CVUploader = () => {
           >
             {currentCV}
           </a>
-          <button onClick={handleDelete} className="text-xs text-destructive hover:underline">
-            Delete
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            <a href={cvUrl || "#"} download className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+              ↓ Download
+            </a>
+            <button onClick={handleDelete} className="text-xs text-destructive hover:underline">
+              Delete
+            </button>
+          </div>
         </div>
       ) : (
         <p className="text-sm text-muted-foreground">No resume uploaded yet.</p>
