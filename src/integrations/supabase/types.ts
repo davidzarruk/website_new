@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      card_materials: {
+        Row: {
+          card_key: string
+          display_label: string | null
+          file_name: string
+          file_path: string
+          id: string
+          uploaded_at: string
+        }
+        Insert: {
+          card_key: string
+          display_label?: string | null
+          file_name: string
+          file_path: string
+          id?: string
+          uploaded_at?: string
+        }
+        Update: {
+          card_key?: string
+          display_label?: string | null
+          file_name?: string
+          file_path?: string
+          id?: string
+          uploaded_at?: string
+        }
+        Relationships: []
+      }
       talk_slides: {
         Row: {
           file_name: string

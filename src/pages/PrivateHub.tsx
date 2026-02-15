@@ -1,6 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import SlideUploader from "@/components/SlideUploader";
+import CVUploader from "@/components/CVUploader";
+import MaterialsUploader from "@/components/MaterialsUploader";
 
 const privateLinks = [
   { label: "Finanzas", href: "/finanzas" },
@@ -52,8 +54,10 @@ const PrivateHub = () => {
           ))}
         </div>
 
-        <div className="mt-12">
+        <div className="mt-12 space-y-8">
+          <CVUploader />
           <SlideUploader />
+          <MaterialsUploader />
         </div>
       </div>
     </div>
