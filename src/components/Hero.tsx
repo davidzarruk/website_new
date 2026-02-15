@@ -7,7 +7,7 @@ const Hero = () => {
       id="about"
       className="min-h-screen flex items-center justify-center px-6 pt-20"
     >
-      <div className="mx-auto max-w-5xl w-full grid md:grid-cols-5 gap-12 items-start">
+      <div className="mx-auto max-w-5xl w-full grid md:grid-cols-5 gap-12 items-center">
         {/* Photo */}
         <motion.div
           className="md:col-span-2 flex justify-center"
