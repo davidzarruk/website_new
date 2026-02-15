@@ -18,7 +18,7 @@ interface Project {
 const projects: Project[] = [
   {
     title: "Notes on Computational Methods for Economists",
-    description: "I am interested in high-performance computing applied to Economics. Particularly, I have spent time working on parallel and GPU computing applied to structural models.",
+    description: "Notes on high-performance computing applied to Economics, specifically on parallel and GPU computing applied to structural models.",
     wide: true,
     coauthors: {
       text: "with",
