@@ -100,10 +100,10 @@ const SlideUploader = () => {
         </select>
 
         <label className="inline-flex items-center gap-2 rounded-lg bg-accent/10 text-accent px-4 py-2 text-sm font-medium cursor-pointer hover:bg-accent/20 transition-colors">
-          {uploading ? "Uploading…" : "Upload PDF"}
+          {uploading ? "Uploading…" : "Upload Slides"}
           <input
             type="file"
-            accept=".pdf"
+            accept=".pdf,.pptx,.ppt"
             className="hidden"
             onChange={handleUpload}
             disabled={uploading}
