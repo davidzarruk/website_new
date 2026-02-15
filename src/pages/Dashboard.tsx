@@ -1,0 +1,32 @@
+import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+
+const Dashboard = () => {
+  const { signOut, user } = useAuth();
+
+  return (
+    <div className="min-h-screen bg-background px-6 py-20">
+      <div className="mx-auto max-w-3xl">
+        <div className="flex items-center justify-between mb-12">
+          <h1 className="font-heading text-3xl text-foreground">Dashboard</h1>
+          <div className="flex items-center gap-4">
+            <Link to="/private" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              ← Private Hub
+            </Link>
+            <button onClick={signOut} className="text-sm text-destructive hover:underline">
+              Sign out
+            </button>
+          </div>
+        </div>
+
+        <div className="rounded-xl bg-card border border-border p-8 text-center">
+          <p className="text-muted-foreground">
+            Your personal dashboard will go here. Logged in as {user?.email}.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;
