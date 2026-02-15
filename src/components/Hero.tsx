@@ -44,7 +44,11 @@ const Hero = () => {
             <a href="https://uniandes.edu.co/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
               Universidad de los Andes
             </a>{" "}
-            in Colombia.
+            in Colombia. I also create data & running content on{" "}
+            <a href="https://www.instagram.com/datarunnerco/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
+              @datarunnerco
+            </a>
+            .
           </p>
           <p className="text-muted-foreground leading-relaxed max-w-lg">
             Previously, VP of Data Science at{" "}
@@ -54,10 +58,6 @@ const Hero = () => {
             and Assistant Professor of Economics at{" "}
             <a href="https://www.itam.mx/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
               ITAM
-            </a>
-            . I also create data & running content on{" "}
-            <a href="https://www.instagram.com/datarunnerco/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
-              @datarunnerco
             </a>
             .
           </p>
