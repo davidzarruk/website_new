@@ -230,7 +230,7 @@ const TeachingSection = () => {
         </motion.h2>
 
         <motion.div
-          className="grid gap-6 md:grid-cols-2"
+          className="grid gap-6 md:grid-cols-3"
           variants={container}
           initial="hidden"
           whileInView="show"
@@ -240,9 +240,7 @@ const TeachingSection = () => {
             <motion.div
               key={course.title}
               variants={item}
-              className={`group rounded-xl bg-card p-6 border border-border hover:border-accent/40 transition-colors ${
-                course.wide ? "md:col-span-2" : ""
-              }`}
+              className="group rounded-xl bg-card p-6 border border-border hover:border-accent/40 transition-colors"
             >
               <h3 className="font-heading text-lg text-foreground leading-snug mb-1">
                 {course.title}
@@ -300,7 +298,7 @@ const TeachingSection = () => {
           {/* Teaching Assistant card */}
           <motion.div
             variants={item}
-            className="md:col-span-2 group rounded-xl bg-card p-6 border border-border hover:border-accent/40 transition-colors"
+            className="group rounded-xl bg-card p-6 border border-border hover:border-accent/40 transition-colors"
           >
             <h3 className="font-heading text-lg text-foreground leading-snug mb-4">
               Teaching Assistant
