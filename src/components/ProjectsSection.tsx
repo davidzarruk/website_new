@@ -109,7 +109,7 @@ const projects: Project[] = [
     tags: ["AI", "Running", "NLP"],
     link: {
       label: "Try it",
-      url: "https://www.davidzarruk.com/berlin.html",
+      url: "/berlin",
     },
   },
 ];
