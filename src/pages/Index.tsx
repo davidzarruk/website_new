@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import TeachingSection from "@/components/TeachingSection";
 import ProjectsSection from "@/components/ProjectsSection";
+import DataRunnerSection from "@/components/DataRunnerSection";
 import ContactSection from "@/components/ContactSection";
 
 const Index = () => {
@@ -11,6 +12,7 @@ const Index = () => {
       <Hero />
       <TeachingSection />
       <ProjectsSection />
+      <DataRunnerSection />
       <ContactSection />
     </div>
   );

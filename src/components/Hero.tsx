@@ -55,6 +55,10 @@ const Hero = () => {
             <a href="https://www.itam.mx/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
               ITAM
             </a>
+            . I also create data & running content on{" "}
+            <a href="https://www.instagram.com/datarunnerco/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
+              @datarunnerco
+            </a>
             .
           </p>
 
