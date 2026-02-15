@@ -4,6 +4,7 @@ import ExpandableGroup, { type ResourceGroup, type ResourceLink } from "./Expand
 interface Course {
   title: string;
   institution: string;
+  institutionUrl: string;
   period: string;
   description: string;
   link?: { label: string; url: string };
@@ -16,6 +17,7 @@ const courses: Course[] = [
   {
     title: "Fiscal Policy and Theory",
     institution: "Universidad de los Andes",
+    institutionUrl: "https://uniandes.edu.co/",
     period: "Fall 2021",
     description:
       "Part of the undergraduate program in Economics.",
@@ -48,6 +50,7 @@ const courses: Course[] = [
   {
     title: "Advanced Methods for Data Analysis",
     institution: "Universidad de los Andes",
+    institutionUrl: "https://uniandes.edu.co/",
     period: "Summer 2021",
     description:
       "Masters in Analytic Intelligence. Topics: time series (ARIMA, Prophet), tree-based models (XGBoost), NLP and neural networks.",
@@ -59,6 +62,7 @@ const courses: Course[] = [
   {
     title: "Predictive Analytics",
     institution: "Crehana",
+    institutionUrl: "https://www.crehana.com/",
     period: "2021 – present",
     description:
       "Two online courses in predictive analytics.",
@@ -70,6 +74,7 @@ const courses: Course[] = [
   {
     title: "Economía 5 — Intermediate Macroeconomics",
     institution: "ITAM",
+    institutionUrl: "https://www.itam.mx/",
     period: "Summer/Fall 2020, Spring 2021",
     description:
       "Studies the neoclassical growth model. Based on 'Macroeconomía Intermedia' by Alejandro Hernández.",
@@ -119,6 +124,7 @@ const courses: Course[] = [
   {
     title: "Dynamic Macroeconomics I",
     institution: "ITAM",
+    institutionUrl: "https://www.itam.mx/",
     period: "Fall 2018",
     description:
       "Masters level. Modern recursive macroeconomic theory and computational tools. References: Ljungqvist & Sargent, Stokey & Lucas.",
@@ -149,6 +155,7 @@ const courses: Course[] = [
   {
     title: "Summer Math Camp (ECON 897)",
     institution: "University of Pennsylvania",
+    institutionUrl: "https://www.upenn.edu/",
     period: "2015, 2016",
     description:
       "Two-week course for incoming Econ Ph.D. students on linear algebra, differentiation, and separating hyperplane theorems. References: Rudin, Pugh.",
@@ -183,6 +190,7 @@ const courses: Course[] = [
   {
     title: "MATLAB Workshop (ECON 1303)",
     institution: "Universidad de los Andes",
+    institutionUrl: "https://uniandes.edu.co/",
     period: "2013",
     description:
       "Introductory course for Economics students, aimed at preparing students to estimate and calibrate Economic models. Joint with Nicolás Idrobo.",
@@ -235,8 +243,10 @@ const TeachingSection = () => {
               <h3 className="font-heading text-lg text-foreground leading-snug mb-1">
                 {course.title}
               </h3>
-              <p className="text-sm text-accent font-medium mb-0.5">
-                {course.institution}
+              <p className="text-sm font-medium mb-0.5">
+                <a href={course.institutionUrl} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
+                  {course.institution}
+                </a>
               </p>
               <p className="text-xs text-muted-foreground mb-3">{course.period}</p>
               <p className="text-sm text-muted-foreground leading-relaxed mb-4">
