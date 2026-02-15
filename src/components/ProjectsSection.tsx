@@ -1,10 +1,12 @@
 import { motion } from "framer-motion";
 import ExpandableGroup, { type ResourceGroup, type ResourceLink } from "./ExpandableGroup";
+import { useCardMaterials } from "@/hooks/useCardMaterials";
 
 interface Project {
   title: string;
   description: string;
   tags: string[];
+  cardKey?: string;
   link?: { label: string; url: string };
   resources?: ResourceGroup[];
   coauthors?: {
@@ -20,6 +22,7 @@ const projects: Project[] = [
     title: "Notes on Computational Methods for Economists",
     description: "Notes on high-performance computing applied to Economics, specifically on parallel and GPU computing applied to structural models.",
     wide: true,
+    cardKey: "computational-methods",
     coauthors: {
       text: "with",
       authors: [
@@ -77,6 +80,7 @@ const projects: Project[] = [
     description:
       "Contributing to national debates with relevant data and statistics through scraping tools and data visualization, jointly with Rodrigo Azuero.",
     tags: ["Data Viz", "Web Scraping"],
+    cardKey: "la-rama-ciudadana",
     link: {
       label: "Visit site",
       url: "http://www.laramaciudadana.com/",
@@ -87,6 +91,7 @@ const projects: Project[] = [
     description:
       "Uses the Google Maps Distance Matrix API to compute distance and travel time between multiple points. Supports bicycling, walking, driving, and transit modes.",
     tags: ["R", "Google Maps API"],
+    cardKey: "gmapsdistance",
     link: {
       label: "GitHub",
       url: "https://github.com/rodazuero/gmapsdistance",
@@ -97,6 +102,7 @@ const projects: Project[] = [
     description:
       "Discretizes an AR(1) process following Tauchen (1986). Generates a discrete Markov chain approximating a continuous-valued univariate AR(1) process.",
     tags: ["R", "Econometrics"],
+    cardKey: "rtauchen",
     link: {
       label: "GitHub",
       url: "https://github.com/davidzarruk/Rtauchen",
@@ -107,6 +113,7 @@ const projects: Project[] = [
     description:
       "An AI-powered tool to answer questions about the Berlin Marathon. A first prototype toward covering all World Marathon Majors.",
     tags: ["AI", "Running", "NLP"],
+    cardKey: "berlin-marathon-ai",
     link: {
       label: "Try it",
       url: "/berlin",
@@ -125,6 +132,17 @@ const itemVariant = {
 };
 
 const ProjectsSection = () => {
+  const { getMaterialsByCard } = useCardMaterials();
+
+  const getEffectiveResources = (project: Project): ResourceGroup[] | undefined => {
+    if (!project.cardKey) return project.resources;
+    const uploadedLinks = getMaterialsByCard(project.cardKey);
+    if (uploadedLinks.length > 0) {
+      return [{ title: "Files", links: uploadedLinks }];
+    }
+    return project.resources;
+  };
+
   return (
     <section id="projects" className="py-24 px-6">
       <div className="mx-auto max-w-5xl">
@@ -145,85 +163,88 @@ const ProjectsSection = () => {
           whileInView="show"
           viewport={{ once: true }}
         >
-          {projects.map((project) => (
-            <motion.div
-              key={project.title}
-              variants={itemVariant}
-              className="group rounded-xl bg-card p-6 border border-border hover:border-accent/40 transition-colors"
-            >
-              <h3 className="font-heading text-lg text-foreground mb-1">
-                {project.title}
-              </h3>
-              {project.coauthors && (
-                <p className="text-sm text-muted-foreground mb-3">
-                  ({project.coauthors.text}{" "}
-                  {project.coauthors.authors.map((a, i) => (
-                    <span key={a.name}>
-                      <a href={a.url} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">{a.name}</a>
-                      {i < project.coauthors!.authors.length - 1 ? " and " : ""}
-                    </span>
-                  ))})
-                </p>
-              )}
-              {project.description && (
-                <p className="text-sm text-muted-foreground leading-relaxed mb-3">
-                  {project.description}
-                </p>
-              )}
-              {project.tags && project.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-xs rounded-full bg-secondary px-3 py-1 text-secondary-foreground font-medium"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-              {project.link && (
-                <a
-                  href={project.link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-sm font-medium text-accent hover:underline mb-4"
-                >
-                  {project.link.label}
-                  <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path d="M7 17L17 7M17 7H7M17 7v10" />
-                  </svg>
-                </a>
-              )}
-
-              {project.resources && (
-                <div className="space-y-3 mt-2">
-                  {project.resources.map((group) => (
-                    <ExpandableGroup key={group.title} group={group} />
-                  ))}
-                </div>
-              )}
-
-              {project.otherLinks && project.otherLinks.length > 0 && (
-                <div className="border-t border-border pt-3 mt-3">
-                  <p className="text-sm font-medium text-foreground mb-2">Other:</p>
-                  <ul className="space-y-1.5 pl-1">
-                    {project.otherLinks.map((ol) => (
-                      <li key={ol.url}>
-                        <a href={ol.url} target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-accent transition-colors flex items-center gap-1.5">
-                          <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
-                            <polyline points="14,2 14,8 20,8" />
-                          </svg>
-                          {ol.label}
-                        </a>
-                      </li>
+          {projects.map((project) => {
+            const effectiveResources = getEffectiveResources(project);
+            return (
+              <motion.div
+                key={project.title}
+                variants={itemVariant}
+                className="group rounded-xl bg-card p-6 border border-border hover:border-accent/40 transition-colors"
+              >
+                <h3 className="font-heading text-lg text-foreground mb-1">
+                  {project.title}
+                </h3>
+                {project.coauthors && (
+                  <p className="text-sm text-muted-foreground mb-3">
+                    ({project.coauthors.text}{" "}
+                    {project.coauthors.authors.map((a, i) => (
+                      <span key={a.name}>
+                        <a href={a.url} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">{a.name}</a>
+                        {i < project.coauthors!.authors.length - 1 ? " and " : ""}
+                      </span>
+                    ))})
+                  </p>
+                )}
+                {project.description && (
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">
+                    {project.description}
+                  </p>
+                )}
+                {project.tags && project.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-xs rounded-full bg-secondary px-3 py-1 text-secondary-foreground font-medium"
+                      >
+                        {tag}
+                      </span>
                     ))}
-                  </ul>
-                </div>
-              )}
-            </motion.div>
-          ))}
+                  </div>
+                )}
+                {project.link && (
+                  <a
+                    href={project.link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-sm font-medium text-accent hover:underline mb-4"
+                  >
+                    {project.link.label}
+                    <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path d="M7 17L17 7M17 7H7M17 7v10" />
+                    </svg>
+                  </a>
+                )}
+
+                {effectiveResources && (
+                  <div className="space-y-3 mt-2">
+                    {effectiveResources.map((group) => (
+                      <ExpandableGroup key={group.title} group={group} />
+                    ))}
+                  </div>
+                )}
+
+                {project.otherLinks && project.otherLinks.length > 0 && (
+                  <div className="border-t border-border pt-3 mt-3">
+                    <p className="text-sm font-medium text-foreground mb-2">Other:</p>
+                    <ul className="space-y-1.5 pl-1">
+                      {project.otherLinks.map((ol) => (
+                        <li key={ol.url}>
+                          <a href={ol.url} target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-accent transition-colors flex items-center gap-1.5">
+                            <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                              <polyline points="14,2 14,8 20,8" />
+                            </svg>
+                            {ol.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </motion.div>
+            );
+          })}
         </motion.div>
       </div>
     </section>

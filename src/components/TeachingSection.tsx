@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import ExpandableGroup, { type ResourceGroup, type ResourceLink } from "./ExpandableGroup";
+import { useCardMaterials } from "@/hooks/useCardMaterials";
 
 interface Course {
   title: string;
@@ -7,6 +8,7 @@ interface Course {
   institutionUrl: string;
   period: string;
   description: string;
+  cardKey?: string;
   link?: { label: string; url: string };
   resources?: ResourceGroup[];
   otherLinks?: ResourceLink[];
@@ -19,12 +21,8 @@ const courses: Course[] = [
     institution: "Universidad de los Andes",
     institutionUrl: "https://uniandes.edu.co/",
     period: "Fall 2021",
-    description:
-      "Part of the undergraduate program in Economics.",
-    link: {
-      label: "Syllabus",
-      url: "https://www.davidzarruk.com/files/fiscal_policy/Programa%20Fiscal%202021-2.pdf",
-    },
+    description: "Part of the undergraduate program in Economics.",
+    cardKey: "fiscal-policy",
     wide: true,
     resources: [
       {
@@ -54,6 +52,7 @@ const courses: Course[] = [
     period: "Summer 2021",
     description:
       "Masters in Analytic Intelligence. Topics: time series (ARIMA, Prophet), tree-based models (XGBoost), NLP and neural networks.",
+    cardKey: "advanced-methods",
     link: {
       label: "GitHub",
       url: "https://github.com/davidzarruk/AdvancedMethodsDataAnalysisClass",
@@ -64,8 +63,8 @@ const courses: Course[] = [
     institution: "Crehana",
     institutionUrl: "https://www.crehana.com/",
     period: "2021 – present",
-    description:
-      "Two online courses in predictive analytics.",
+    description: "Two online courses in predictive analytics.",
+    cardKey: "predictive-analytics",
     otherLinks: [
       { label: "Classification models in R", url: "https://www.crehana.com/cursos-online-data/analitica-predictiva-y-modelos-de-clasificacion-en-r/" },
       { label: "Regression models in Python", url: "https://www.crehana.com/cursos-online-data/analitica-predictiva-y-modelos-de-regresion-en-python/" },
@@ -78,10 +77,7 @@ const courses: Course[] = [
     period: "Summer/Fall 2020, Spring 2021",
     description:
       "Studies the neoclassical growth model. Based on 'Macroeconomía Intermedia' by Alejandro Hernández.",
-    link: {
-      label: "Syllabus",
-      url: "https://www.davidzarruk.com/files/economia_5/Temario%20EcoV%20O20.pdf",
-    },
+    cardKey: "economia-5",
     wide: true,
     resources: [
       {
@@ -128,6 +124,7 @@ const courses: Course[] = [
     period: "Fall 2018",
     description:
       "Masters level. Modern recursive macroeconomic theory and computational tools. References: Ljungqvist & Sargent, Stokey & Lucas.",
+    cardKey: "dynamic-macro",
     wide: true,
     otherLinks: [
       { label: "Syllabus", url: "https://www.davidzarruk.com/files/dynamic_macro_itam_2018/syllabus_rec_macro_18.pdf" },
@@ -159,6 +156,7 @@ const courses: Course[] = [
     period: "2015, 2016",
     description:
       "Two-week course for incoming Econ Ph.D. students on linear algebra, differentiation, and separating hyperplane theorems. References: Rudin, Pugh.",
+    cardKey: "math-camp",
     wide: true,
     otherLinks: [
       { label: "Syllabus", url: "https://www.davidzarruk.com/files/Math%20camp/syllabus_math_camp_16.pdf" },
@@ -194,14 +192,13 @@ const courses: Course[] = [
     period: "2013",
     description:
       "Introductory course for Economics students, aimed at preparing students to estimate and calibrate Economic models. Joint with Nicolás Idrobo.",
+    cardKey: "matlab-workshop",
     link: {
       label: "Syllabus",
       url: "https://economia.uniandes.edu.co/assets/archivos/Programas_Academicos/Pregrado/TallerdeMatlab_NicolasIdrobo_201310.pdf",
     },
   },
 ];
-
-
 
 const container = {
   hidden: {},
@@ -214,6 +211,18 @@ const item = {
 };
 
 const TeachingSection = () => {
+  const { getMaterialsByCard } = useCardMaterials();
+
+  const getEffectiveResources = (course: Course): ResourceGroup[] | undefined => {
+    if (!course.cardKey) return course.resources;
+    const uploadedLinks = getMaterialsByCard(course.cardKey);
+    if (uploadedLinks.length > 0) {
+      // Replace hardcoded resources with uploaded files
+      return [{ title: "Files", links: uploadedLinks }];
+    }
+    return course.resources;
+  };
+
   return (
     <section id="teaching" className="py-24 px-6 bg-secondary/40">
       <div className="mx-auto max-w-5xl">
@@ -234,66 +243,69 @@ const TeachingSection = () => {
           whileInView="show"
           viewport={{ once: true }}
         >
-          {courses.map((course) => (
-            <motion.div
-              key={course.title}
-              variants={item}
-              className="group rounded-xl bg-card p-6 border border-border hover:border-accent/40 transition-colors"
-            >
-              <h3 className="font-heading text-lg text-foreground leading-snug mb-1">
-                {course.title}
-              </h3>
-              <p className="text-sm font-medium mb-0.5">
-                <a href={course.institutionUrl} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
-                  {course.institution}
-                </a>
-              </p>
-              <p className="text-xs text-muted-foreground mb-3">{course.period}</p>
-              <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                {course.description}
-              </p>
+          {courses.map((course) => {
+            const effectiveResources = getEffectiveResources(course);
+            return (
+              <motion.div
+                key={course.title}
+                variants={item}
+                className="group rounded-xl bg-card p-6 border border-border hover:border-accent/40 transition-colors"
+              >
+                <h3 className="font-heading text-lg text-foreground leading-snug mb-1">
+                  {course.title}
+                </h3>
+                <p className="text-sm font-medium mb-0.5">
+                  <a href={course.institutionUrl} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
+                    {course.institution}
+                  </a>
+                </p>
+                <p className="text-xs text-muted-foreground mb-3">{course.period}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                  {course.description}
+                </p>
 
-              {course.link && (
-                <a
-                  href={course.link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-sm font-medium text-accent hover:underline mb-4"
-                >
-                  {course.link.label}
-                  <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path d="M7 17L17 7M17 7H7M17 7v10" />
-                  </svg>
-                </a>
-              )}
+                {course.link && (
+                  <a
+                    href={course.link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-sm font-medium text-accent hover:underline mb-4"
+                  >
+                    {course.link.label}
+                    <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path d="M7 17L17 7M17 7H7M17 7v10" />
+                    </svg>
+                  </a>
+                )}
 
-              {course.otherLinks && course.otherLinks.length > 0 && (
-                <div className="mb-2">
-                  <ul className="space-y-1.5 pl-1">
-                    {course.otherLinks.map((ol) => (
-                      <li key={ol.url}>
-                        <a href={ol.url} target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-accent transition-colors flex items-center gap-1.5">
-                          <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
-                            <polyline points="14,2 14,8 20,8" />
-                          </svg>
-                          {ol.label}
-                        </a>
-                      </li>
+                {course.otherLinks && course.otherLinks.length > 0 && (
+                  <div className="mb-2">
+                    <ul className="space-y-1.5 pl-1">
+                      {course.otherLinks.map((ol) => (
+                        <li key={ol.url}>
+                          <a href={ol.url} target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-accent transition-colors flex items-center gap-1.5">
+                            <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                              <polyline points="14,2 14,8 20,8" />
+                            </svg>
+                            {ol.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {effectiveResources && (
+                  <div className="space-y-3 mt-2">
+                    {effectiveResources.map((group) => (
+                      <ExpandableGroup key={group.title} group={group} />
                     ))}
-                  </ul>
-                </div>
-              )}
-
-              {course.resources && (
-                <div className="space-y-3 mt-2">
-                  {course.resources.map((group) => (
-                    <ExpandableGroup key={group.title} group={group} />
-                  ))}
-                </div>
-              )}
-            </motion.div>
-          ))}
+                  </div>
+                )}
+              </motion.div>
+            );
+          })}
         </motion.div>
       </div>
     </section>
