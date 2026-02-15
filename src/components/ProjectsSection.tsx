@@ -141,7 +141,7 @@ const ProjectsSection = () => {
             <motion.div
               key={project.title}
               variants={itemVariant}
-              className={`group rounded-xl bg-background p-6 border border-border hover:border-accent/40 transition-all hover:shadow-md ${
+              className={`group rounded-xl bg-card p-6 border border-border hover:border-accent/40 transition-colors ${
                 project.wide ? "md:col-span-2" : ""
               }`}
             >
@@ -164,16 +164,6 @@ const ProjectsSection = () => {
                   {project.description}
                 </p>
               )}
-              <div className="flex flex-wrap gap-2 mb-4">
-                {project.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-xs rounded-full bg-secondary px-3 py-1 text-secondary-foreground font-medium"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
               {project.link && (
                 <a
                   href={project.link.url}
