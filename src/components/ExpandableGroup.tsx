@@ -8,17 +8,20 @@ export interface ResourceLink {
 
 export interface ResourceGroup {
   title: string;
-  links: ResourceLink[];
+  links?: ResourceLink[];
+  subgroups?: ResourceGroup[];
 }
 
-const ExpandableGroup = ({ group }: { group: ResourceGroup }) => {
+const ExpandableGroup = ({ group, nested = false }: { group: ResourceGroup; nested?: boolean }) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="border-t border-border pt-3">
+    <div className={nested ? "pl-2" : "border-t border-border pt-3"}>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center justify-between w-full text-left text-sm font-medium text-foreground hover:text-accent transition-colors"
+        className={`flex items-center justify-between w-full text-left text-sm font-medium hover:text-accent transition-colors ${
+          nested ? "text-muted-foreground" : "text-foreground"
+        }`}
       >
         <span>{group.title}</span>
         <ChevronDown
@@ -26,24 +29,35 @@ const ExpandableGroup = ({ group }: { group: ResourceGroup }) => {
         />
       </button>
       {open && (
-        <ul className="mt-2 space-y-1.5 pl-1">
-          {group.links.map((link) => (
-            <li key={link.url}>
-              <a
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-muted-foreground hover:text-accent transition-colors flex items-center gap-1.5"
-              >
-                <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
-                  <polyline points="14,2 14,8 20,8" />
-                </svg>
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
+        <div className="mt-2">
+          {group.subgroups && (
+            <div className="space-y-2">
+              {group.subgroups.map((sub) => (
+                <ExpandableGroup key={sub.title} group={sub} nested />
+              ))}
+            </div>
+          )}
+          {group.links && (
+            <ul className="space-y-1.5 pl-1">
+              {group.links.map((link) => (
+                <li key={link.url}>
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-muted-foreground hover:text-accent transition-colors flex items-center gap-1.5"
+                  >
+                    <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                      <polyline points="14,2 14,8 20,8" />
+                    </svg>
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       )}
     </div>
   );

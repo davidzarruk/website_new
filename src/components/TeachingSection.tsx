@@ -193,17 +193,7 @@ const courses: Course[] = [
   },
 ];
 
-const taExperience = [
-  { course: "Macro Theory II for Economics Ph.D. (ECON 704)", professor: "Prof. Harold Cole", year: "2014, 2015", institution: "University of Pennsylvania" },
-  { course: "Introduction to Microeconomics (ECON 1)", professor: "Prof. Rebecca Stein", year: "2015", institution: "University of Pennsylvania" },
-  { course: "Monetary and Fiscal Policy (ECON 243)", professor: "Prof. Harold Cole", year: "2014", institution: "University of Pennsylvania" },
-  { course: "Advanced Microeconomics: Game Theory (ECON 4113)", professor: "Prof. Paula Jaramillo", year: "2012", institution: "Universidad de los Andes" },
-  { course: "Microeconomics II (ECON 2101)", professor: "Prof. Ana María Ibáñez", year: "2012", institution: "Universidad de los Andes" },
-  { course: "Advanced Macroeconomics: Long Run (ECON 4213)", professor: "Prof. Marcela Eslava", year: "2011", institution: "Universidad de los Andes" },
-  { course: "Linear Algebra I (MATE 1105)", professor: "Prof. Schweitzer Rocuts", year: "2011", institution: "Universidad de los Andes" },
-  { course: "Mathematical Methods for Economists (MATE 2711)", professor: "Prof. Diego Escobar", year: "2011", institution: "Universidad de los Andes" },
-  { course: "Introduction to Asymmetric Information and Auction Theory", professor: "Prof. Miguel Espinoza", year: "2011", institution: "Universidad de los Andes" },
-];
+
 
 const container = {
   hidden: {},
@@ -294,32 +284,6 @@ const TeachingSection = () => {
               )}
             </motion.div>
           ))}
-
-          {/* Teaching Assistant card */}
-          <motion.div
-            variants={item}
-            className="group rounded-xl bg-card p-6 border border-border hover:border-accent/40 transition-colors"
-          >
-            <h3 className="font-heading text-lg text-foreground leading-snug mb-4">
-              Teaching Assistant
-            </h3>
-            <div className="grid gap-x-8 gap-y-1 md:grid-cols-2">
-              {["University of Pennsylvania", "Universidad de los Andes"].map((inst) => (
-                <div key={inst}>
-                  <p className="text-sm text-accent font-medium mb-2">{inst}</p>
-                  <ul className="space-y-1.5 mb-4">
-                    {taExperience
-                      .filter((ta) => ta.institution === inst)
-                      .map((ta) => (
-                        <li key={ta.course} className="text-sm text-muted-foreground">
-                          {ta.course} — {ta.professor}, {ta.year}
-                        </li>
-                      ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </motion.div>
         </motion.div>
       </div>
     </section>
