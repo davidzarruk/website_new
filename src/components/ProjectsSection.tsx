@@ -131,7 +131,7 @@ const ProjectsSection = () => {
         </motion.h2>
 
         <motion.div
-          className="grid gap-6 md:grid-cols-2"
+          className="grid gap-6 md:grid-cols-3"
           variants={container}
           initial="hidden"
           whileInView="show"
@@ -141,9 +141,7 @@ const ProjectsSection = () => {
             <motion.div
               key={project.title}
               variants={itemVariant}
-              className={`group rounded-xl bg-card p-6 border border-border hover:border-accent/40 transition-colors ${
-                project.wide ? "md:col-span-2" : ""
-              }`}
+              className="group rounded-xl bg-card p-6 border border-border hover:border-accent/40 transition-colors"
             >
               <h3 className="font-heading text-lg text-foreground mb-1">
                 {project.title}
