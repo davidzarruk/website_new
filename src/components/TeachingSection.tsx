@@ -215,7 +215,7 @@ const item = {
 
 const TeachingSection = () => {
   return (
-    <section id="teaching" className="py-24 px-6">
+    <section id="teaching" className="py-24 px-6 bg-secondary/40">
       <div className="mx-auto max-w-5xl">
         <motion.h2
           className="font-heading text-3xl md:text-4xl text-foreground mb-12"
