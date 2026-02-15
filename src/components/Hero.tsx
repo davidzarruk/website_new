@@ -7,7 +7,17 @@ const Hero = () => {
       id="about"
       className="min-h-screen flex items-center justify-center px-6 pt-20"
     >
-      <div className="mx-auto max-w-5xl w-full grid md:grid-cols-5 gap-12 items-center">
+      <div className="mx-auto max-w-5xl w-full">
+      <motion.h1
+          className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground leading-tight mb-8"
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
+        >
+          David Zarruk
+        </motion.h1>
+
+        <div className="max-w-5xl w-full grid md:grid-cols-5 gap-12 items-center">
         {/* Photo */}
         <motion.div
           className="md:col-span-2 flex justify-center"
@@ -20,7 +30,7 @@ const Hero = () => {
             <img
               src={profileImg}
               alt="David Zarruk"
-              className="relative w-64 h-64 md:w-72 md:h-72 object-cover rounded-2xl shadow-lg"
+              className="relative w-72 h-72 md:w-80 md:h-80 object-cover rounded-2xl shadow-lg"
             />
           </div>
         </motion.div>
@@ -32,9 +42,6 @@ const Hero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
         >
-          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground leading-tight">
-            David Zarruk
-          </h1>
           <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-lg">
             Senior Economist at{" "}
             <a href="https://www.amazon.com/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
@@ -98,6 +105,7 @@ const Hero = () => {
             </a>
           </div>
         </motion.div>
+      </div>
       </div>
     </section>
   );
