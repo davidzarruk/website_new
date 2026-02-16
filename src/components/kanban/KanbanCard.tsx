@@ -8,6 +8,7 @@ interface KanbanCardProps {
   ticket: Ticket;
   index: number;
   isDoneColumn?: boolean;
+  onClick?: (ticket: Ticket) => void;
 }
 
 const priorityColors: Record<string, string> = {
@@ -16,7 +17,7 @@ const priorityColors: Record<string, string> = {
   low: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
 };
 
-const KanbanCard = ({ ticket, index, isDoneColumn }: KanbanCardProps) => {
+const KanbanCard = ({ ticket, index, isDoneColumn, onClick }: KanbanCardProps) => {
   return (
     <Draggable draggableId={ticket.id} index={index}>
       {(provided, snapshot) => (
@@ -24,7 +25,8 @@ const KanbanCard = ({ ticket, index, isDoneColumn }: KanbanCardProps) => {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className={`rounded-lg border bg-card p-3 mb-2 transition-shadow ${
+          onClick={() => onClick?.(ticket)}
+          className={`rounded-lg border bg-card p-3 mb-2 transition-shadow cursor-pointer ${
             snapshot.isDragging ? 'shadow-lg ring-2 ring-accent/40' : 'shadow-sm'
           } ${isDoneColumn ? 'opacity-50' : ''}`}
         >

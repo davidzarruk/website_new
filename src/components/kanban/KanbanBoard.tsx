@@ -2,11 +2,13 @@ import { useState, useEffect, useCallback } from 'react';
 import { DragDropContext, type DropResult } from '@hello-pangea/dnd';
 import { kanbanSupabase, KANBAN_COLUMNS, type Ticket } from '@/integrations/kanban/client';
 import KanbanColumn from './KanbanColumn';
+import KanbanCardDialog from './KanbanCardDialog';
 import { toast } from 'sonner';
 
 const KanbanBoard = () => {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
 
   const fetchTickets = useCallback(async () => {
     const { data, error } = await kanbanSupabase
@@ -86,9 +88,10 @@ const KanbanBoard = () => {
     <DragDropContext onDragEnd={handleDragEnd}>
       <div className="flex gap-4 overflow-x-auto pb-4">
         {grouped.map((col) => (
-          <KanbanColumn key={col.id} columnId={col.id} label={col.label} tickets={col.tickets} />
+          <KanbanColumn key={col.id} columnId={col.id} label={col.label} tickets={col.tickets} onCardClick={setSelectedTicket} />
         ))}
       </div>
+      <KanbanCardDialog ticket={selectedTicket} open={!!selectedTicket} onOpenChange={(open) => !open && setSelectedTicket(null)} />
     </DragDropContext>
   );
 };
