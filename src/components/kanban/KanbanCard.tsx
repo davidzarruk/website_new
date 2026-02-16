@@ -1,6 +1,8 @@
 import { Draggable } from '@hello-pangea/dnd';
 import { Badge } from '@/components/ui/badge';
+import { Calendar, Clock, User } from 'lucide-react';
 import type { Ticket } from '@/integrations/kanban/client';
+import { formatDistanceToNow, format } from 'date-fns';
 
 interface KanbanCardProps {
   ticket: Ticket;
@@ -44,8 +46,21 @@ const KanbanCard = ({ ticket, index, isDoneColumn }: KanbanCardProps) => {
               </Badge>
             )}
             {ticket.assignee && (
-              <span className="text-[11px] text-muted-foreground">
-                → {ticket.assignee}
+              <span className="text-[11px] text-muted-foreground flex items-center gap-0.5">
+                <User className="w-3 h-3" /> {ticket.assignee}
+              </span>
+            )}
+          </div>
+          <div className="flex flex-col gap-0.5 mt-2 text-[10px] text-muted-foreground">
+            <span className="flex items-center gap-1">
+              <Calendar className="w-3 h-3" /> Created {formatDistanceToNow(new Date(ticket.created_at), { addSuffix: true })}
+            </span>
+            <span className="flex items-center gap-1">
+              <Clock className="w-3 h-3" /> Updated {formatDistanceToNow(new Date(ticket.updated_at), { addSuffix: true })}
+            </span>
+            {ticket.completed_at && (
+              <span className="flex items-center gap-1">
+                ✓ Completed {format(new Date(ticket.completed_at), 'MMM d, yyyy')}
               </span>
             )}
           </div>
