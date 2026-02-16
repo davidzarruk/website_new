@@ -12,6 +12,7 @@ import Finanzas from "./pages/Finanzas";
 import Medicos from "./pages/Medicos";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Kanban from "./pages/Kanban";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ const App = () => (
             <Route path="/finanzas" element={<ProtectedRoute><Finanzas /></ProtectedRoute>} />
             <Route path="/medicos" element={<ProtectedRoute><Medicos /></ProtectedRoute>} />
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/kanban" element={<Kanban />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
