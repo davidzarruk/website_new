@@ -43,14 +43,14 @@ const KanbanCard = ({ ticket, index, isDoneColumn, onClick }: KanbanCardProps) =
           </p>
           <div className="flex items-center gap-1.5 mt-2 flex-wrap">
             {ticket.role && (
-              <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
+              <Badge className="text-[10px] px-1.5 py-0 bg-violet-100 text-violet-700 border-violet-200 hover:bg-violet-100">
                 {ticket.role}
               </Badge>
             )}
             {ticket.assignee && (
-              <span className="text-[11px] text-muted-foreground flex items-center gap-0.5">
-                <User className="w-3 h-3" /> {ticket.assignee}
-              </span>
+              <Badge className="text-[10px] px-1.5 py-0 bg-sky-100 text-sky-700 border-sky-200 hover:bg-sky-100">
+                <User className="w-3 h-3 mr-0.5" /> {ticket.assignee}
+              </Badge>
             )}
           </div>
           <div className="flex flex-col gap-0.5 mt-2 text-[10px] text-muted-foreground">
