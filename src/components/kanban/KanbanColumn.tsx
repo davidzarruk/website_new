@@ -6,9 +6,10 @@ interface KanbanColumnProps {
   columnId: string;
   label: string;
   tickets: Ticket[];
+  onCardClick?: (ticket: Ticket) => void;
 }
 
-const KanbanColumn = ({ columnId, label, tickets }: KanbanColumnProps) => {
+const KanbanColumn = ({ columnId, label, tickets, onCardClick }: KanbanColumnProps) => {
   const isDone = columnId === 'done';
 
   return (
@@ -29,7 +30,7 @@ const KanbanColumn = ({ columnId, label, tickets }: KanbanColumnProps) => {
             } border-2 border-dashed`}
           >
             {tickets.map((ticket, index) => (
-              <KanbanCard key={ticket.id} ticket={ticket} index={index} isDoneColumn={isDone} />
+              <KanbanCard key={ticket.id} ticket={ticket} index={index} isDoneColumn={isDone} onClick={onCardClick} />
             ))}
             {provided.placeholder}
           </div>
