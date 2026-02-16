@@ -8,6 +8,7 @@ const privateLinks = [
   { label: "Finanzas", href: "/finanzas" },
   { label: "Médicos", href: "/medicos" },
   { label: "Dashboard", href: "/dashboard" },
+  { label: "Kanban", href: "/kanban" },
 ];
 
 const PrivateHub = () => {
