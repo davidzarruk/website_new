@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
 const SUPABASE_URL = 'https://agegeoxsyebswcpncqcg.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFnZWdlb3hzeWVic3djcG5jcWNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzMzgzNjcsImV4cCI6MjA4NjkxNDM2N30.KMnbL5o1tyOxfrEB4itMAFaGxSJmqcOiPMbOnE0oRKA';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFnZWdlb3hzeWVic3djcG5jcWNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzMzgzNjcsImV4cCI6MjA4NjkxNDM2N30._jBm48fpo8kFVR6UZPvi43FXycMhfqfUz3Lf-XvBLAQ';
 
 export interface ContentItem {
   id: string;
