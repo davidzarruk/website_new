@@ -260,35 +260,31 @@ const Analytics = () => {
               <Skeleton className="h-64 w-full" />
             ) : (
               <ScrollArea className="h-96 w-full">
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 pr-4">
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 pr-4">
                   {userList.map((user) => (
                     <div
                       key={user.id}
-                      className="p-3 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors"
+                      className="p-2 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors"
                     >
-                      <div className="space-y-1.5">
+                      <div className="space-y-1">
                         <div>
-                          <p className="text-xs font-semibold text-foreground truncate">
+                          <p className="text-[11px] font-semibold text-foreground truncate">
                             {user.full_name || 'No name'}
                           </p>
-                          <p className="text-[10px] text-muted-foreground truncate">
+                          <p className="text-[9px] text-muted-foreground truncate">
                             @{user.username || 'no-username'}
                           </p>
                         </div>
                         
-                        <div className="space-y-0.5 text-[10px]">
-                          {user.age && (
-                            <div className="flex justify-between">
-                              <span className="text-muted-foreground">Age</span>
-                              <span className="text-foreground font-medium">{user.age}</span>
-                            </div>
-                          )}
-                          {user.country_code && (
-                            <div className="flex justify-between">
-                              <span className="text-muted-foreground">Country</span>
-                              <span className="text-foreground font-medium">{user.country_code}</span>
-                            </div>
-                          )}
+                        <div className="space-y-0.5 text-[9px]">
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Age</span>
+                            <span className="text-foreground font-medium">{user.age || 0}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Country</span>
+                            <span className="text-foreground font-medium">{user.country_code || 'N/A'}</span>
+                          </div>
                           <div className="flex justify-between">
                             <span className="text-muted-foreground">Points</span>
                             <span className="text-foreground font-medium">{user.points}</span>
@@ -303,7 +299,7 @@ const Analytics = () => {
                           </div>
                         </div>
                         
-                        <div className="text-[9px] text-muted-foreground pt-1 border-t border-border">
+                        <div className="text-[8px] text-muted-foreground pt-0.5 border-t border-border">
                           {new Date(user.created_at).toLocaleDateString('en-US', {
                             month: 'short',
                             day: 'numeric',
