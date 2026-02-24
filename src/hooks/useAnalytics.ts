@@ -88,8 +88,8 @@ export function useAnalytics(refreshInterval = 60000) {
       racesRes,
     ] = await Promise.all([
       supabase.from('analytics_summary').select('*').single(),
-      supabase.from('analytics_daily_signups').select('*'),
-      supabase.from('analytics_daily_photos').select('*'),
+      supabase.from('analytics_daily_signups').select('*').order('day', { ascending: true }),
+      supabase.from('analytics_daily_photos').select('*').order('day', { ascending: true }),
       supabase.from('analytics_page_views').select('*'),
       supabase.from('analytics_sessions').select('*'),
       supabase.from('analytics_funnel').select('*').single(),
