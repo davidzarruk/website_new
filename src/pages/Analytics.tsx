@@ -260,56 +260,61 @@ const Analytics = () => {
               <Skeleton className="h-64 w-full" />
             ) : (
               <ScrollArea className="h-96 w-full">
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 pr-4">
+                <div className="space-y-3 pr-4">
                   {userList.map((user) => (
                     <div
                       key={user.id}
-                      className="p-2 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors"
+                      className="p-4 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors"
                     >
-                      <div className="space-y-1">
-                        <div>
-                          <p className="text-[11px] font-semibold text-foreground truncate">
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-foreground truncate">
                             {user.full_name || 'No name'}
                           </p>
-                          <p className="text-[9px] text-muted-foreground truncate">
+                          <p className="text-xs text-muted-foreground">
                             @{user.username || 'no-username'}
                           </p>
+                          {user.email && (
+                            <p className="text-xs text-muted-foreground truncate">
+                              {user.email}
+                            </p>
+                          )}
                         </div>
-                        
-                        <div className="space-y-0.5 text-[9px]">
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Age</span>
-                            <span className="text-foreground font-medium">{user.age || 0}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Country</span>
-                            <span className="text-foreground font-medium">{user.country_code || 'N/A'}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Points</span>
-                            <span className="text-foreground font-medium">{user.points}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Photos</span>
-                            <span className="text-foreground font-medium">{user.photo_count ?? 0}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Races</span>
-                            <span className="text-foreground font-medium">{user.race_count ?? 0}</span>
-                          </div>
-                        </div>
-                        
-                        <div className="text-[8px] text-muted-foreground pt-0.5 border-t border-border">
+                        <div className="text-xs text-muted-foreground ml-4">
                           {new Date(user.created_at).toLocaleDateString('en-US', {
                             month: 'short',
                             day: 'numeric',
+                            year: 'numeric',
                           })}
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-2 gap-2 text-xs mt-3">
+                        <div className="flex items-center gap-1">
+                          <span className="text-muted-foreground">Age:</span>
+                          <span className="text-foreground font-medium">{user.age || 0}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-muted-foreground">Country:</span>
+                          <span className="text-foreground font-medium">{user.country_code || 'N/A'}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-muted-foreground">Points:</span>
+                          <span className="text-foreground font-medium">{user.points}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-muted-foreground">Photos:</span>
+                          <span className="text-foreground font-medium">{user.photo_count ?? 0}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-muted-foreground">Races:</span>
+                          <span className="text-foreground font-medium">{user.race_count ?? 0}</span>
                         </div>
                       </div>
                     </div>
                   ))}
                   {userList.length === 0 && (
-                    <p className="col-span-full text-sm text-muted-foreground text-center py-8">No users yet</p>
+                    <p className="text-sm text-muted-foreground text-center py-8">No users yet</p>
                   )}
                 </div>
               </ScrollArea>

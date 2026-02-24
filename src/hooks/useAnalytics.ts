@@ -64,6 +64,7 @@ export interface UserListItem {
   id: string;
   full_name: string | null;
   username: string | null;
+  email: string | null;
   created_at: string;
   points: number;
   age: number | null;
