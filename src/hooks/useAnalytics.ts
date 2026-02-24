@@ -133,8 +133,8 @@ export function useAnalytics(refreshInterval = 60000) {
       const enrichedUsers = await Promise.all(
         users.map(async (user) => {
           const [photoRes, raceRes] = await Promise.all([
-            supabase.from('user_photos').select('id', { count: 'exact', head: true }).eq('user_id', user.id),
-            supabase.from('user_race_history').select('id', { count: 'exact', head: true }).eq('user_id', user.id),
+            supabase.from('user_photos').select('*', { count: 'exact' }).eq('user_id', user.id),
+            supabase.from('user_race_history').select('*', { count: 'exact' }).eq('user_id', user.id),
           ]);
           
           return {
