@@ -261,18 +261,18 @@ const Analytics = () => {
               <Skeleton className="h-64 w-full" />
             ) : (
               <ScrollArea className="h-96 w-full">
-                <div className="space-y-3 pr-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3 pr-4">
                   {userList.map((user) => (
                     <div
                       key={user.id}
-                      className="p-4 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors"
+                      className="p-3 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors"
                     >
-                      <div className="flex items-start justify-between mb-2">
-                        <div className="flex-1 min-w-0">
+                      <div className="space-y-2">
+                        <div>
                           <p className="text-sm font-semibold text-foreground truncate">
                             {user.full_name || 'No name'}
                           </p>
-                          <p className="text-xs text-muted-foreground">
+                          <p className="text-xs text-muted-foreground truncate">
                             @{user.username || 'no-username'}
                           </p>
                           {user.email && (
@@ -281,41 +281,41 @@ const Analytics = () => {
                             </p>
                           )}
                         </div>
-                        <div className="text-xs text-muted-foreground ml-4">
+                        
+                        <div className="space-y-1 text-xs">
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Age</span>
+                            <span className="text-foreground font-medium">{user.age || 0}</span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-muted-foreground">Country</span>
+                            <span className="text-foreground font-medium text-base">{getCountryFlag(user.country_code) || '🌍'}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Points</span>
+                            <span className="text-foreground font-medium">{user.points}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Photos</span>
+                            <span className="text-foreground font-medium">{user.photo_count ?? 0}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Races</span>
+                            <span className="text-foreground font-medium">{user.race_count ?? 0}</span>
+                          </div>
+                        </div>
+                        
+                        <div className="text-xs text-muted-foreground pt-1 border-t border-border">
                           {new Date(user.created_at).toLocaleDateString('en-US', {
                             month: 'short',
                             day: 'numeric',
-                            year: 'numeric',
                           })}
-                        </div>
-                      </div>
-                      
-                      <div className="grid grid-cols-2 gap-2 text-xs mt-3">
-                        <div className="flex items-center gap-1">
-                          <span className="text-muted-foreground">Age:</span>
-                          <span className="text-foreground font-medium">{user.age || 0}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <span className="text-muted-foreground">Country:</span>
-                          <span className="text-foreground font-medium text-lg">{getCountryFlag(user.country_code) || '🌍'}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <span className="text-muted-foreground">Points:</span>
-                          <span className="text-foreground font-medium">{user.points}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <span className="text-muted-foreground">Photos:</span>
-                          <span className="text-foreground font-medium">{user.photo_count ?? 0}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <span className="text-muted-foreground">Races:</span>
-                          <span className="text-foreground font-medium">{user.race_count ?? 0}</span>
                         </div>
                       </div>
                     </div>
                   ))}
                   {userList.length === 0 && (
-                    <p className="text-sm text-muted-foreground text-center py-8">No users yet</p>
+                    <p className="col-span-full text-sm text-muted-foreground text-center py-8">No users yet</p>
                   )}
                 </div>
               </ScrollArea>
