@@ -76,6 +76,12 @@ const ContentCalendar = () => {
     fetchItems();
   };
 
+  const handleUpdateStep = async (id: string, updates: Partial<ContentItem>) => {
+    setItems(prev => prev.map(i => i.id === id ? { ...i, ...updates } : i));
+    const { error } = await contentCalendarClient.from('content_calendar').update({ ...updates, updated_at: new Date().toISOString() }).eq('id', id);
+    if (error) { toast.error('Update failed'); fetchItems(); }
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-6xl px-4 py-6">
@@ -106,7 +112,7 @@ const ContentCalendar = () => {
         ) : isMobile ? (
           <MobileListView year={year} month={month} items={items} onCardClick={openEdit} onEmptyDayClick={openCreate} />
         ) : (
-          <CalendarGrid year={year} month={month} items={items} onCardClick={openEdit} onEmptyDayClick={openCreate} onReschedule={handleReschedule} />
+          <CalendarGrid year={year} month={month} items={items} onCardClick={openEdit} onEmptyDayClick={openCreate} onReschedule={handleReschedule} onUpdateStep={handleUpdateStep} />
         )}
       </div>
 

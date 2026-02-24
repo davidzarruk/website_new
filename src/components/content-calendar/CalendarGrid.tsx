@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { DragDropContext, Droppable, Draggable, type DropResult } from '@hello-pangea/dnd';
+import { Checkbox } from '@/components/ui/checkbox';
 import type { ContentItem } from '@/integrations/content-calendar/client';
 
 const PILLAR_DOT: Record<string, string> = {
@@ -10,6 +11,16 @@ const PILLAR_DOT: Record<string, string> = {
   en_la_calle: 'bg-orange-500',
 };
 
+const STEPS: { key: keyof Pick<ContentItem, 'has_idea' | 'has_script' | 'has_recording' | 'has_edit' | 'is_ready'>; label: string }[] = [
+  { key: 'has_idea', label: '💡' },
+  { key: 'has_script', label: '📝' },
+  { key: 'has_recording', label: '🎙️' },
+  { key: 'has_edit', label: '✂️' },
+  { key: 'is_ready', label: '✅' },
+];
+
+const STEP_ORDER: (keyof Pick<ContentItem, 'has_idea' | 'has_script' | 'has_recording' | 'has_edit' | 'is_ready'>)[] = ['has_idea', 'has_script', 'has_recording', 'has_edit', 'is_ready'];
+
 const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 interface CalendarGridProps {
@@ -19,6 +30,7 @@ interface CalendarGridProps {
   onCardClick: (item: ContentItem) => void;
   onEmptyDayClick: (dateStr: string) => void;
   onReschedule: (id: string, newDate: string) => void;
+  onUpdateStep?: (id: string, updates: Partial<ContentItem>) => void;
 }
 
 function getMonthDays(year: number, month: number) {
@@ -32,18 +44,7 @@ function getMonthDays(year: number, month: number) {
   return cells;
 }
 
-function progressDots(item: ContentItem) {
-  const steps = [item.has_idea, item.has_script, item.has_recording, item.has_edit, item.is_ready];
-  return (
-    <div className="flex gap-0.5 mt-0.5">
-      {steps.map((s, i) => (
-        <span key={i} className={`w-1.5 h-1.5 rounded-full ${s ? 'bg-accent' : 'bg-border'}`} />
-      ))}
-    </div>
-  );
-}
-
-const CalendarGrid = ({ year, month, items, onCardClick, onEmptyDayClick, onReschedule }: CalendarGridProps) => {
+const CalendarGrid = ({ year, month, items, onCardClick, onEmptyDayClick, onReschedule, onUpdateStep }: CalendarGridProps) => {
   const cells = useMemo(() => getMonthDays(year, month), [year, month]);
   const today = new Date();
   const isToday = (day: number) => today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
@@ -69,6 +70,18 @@ const CalendarGrid = ({ year, month, items, onCardClick, onEmptyDayClick, onResc
     }
   };
 
+  const handleStepToggle = (item: ContentItem, stepKey: typeof STEP_ORDER[number], checked: boolean) => {
+    if (!onUpdateStep) return;
+    const idx = STEP_ORDER.indexOf(stepKey);
+    const updates: Partial<ContentItem> = {};
+    if (checked) {
+      for (let i = 0; i <= idx; i++) updates[STEP_ORDER[i]] = true;
+    } else {
+      for (let i = idx; i < STEP_ORDER.length; i++) updates[STEP_ORDER[i]] = false;
+    }
+    onUpdateStep(item.id, updates);
+  };
+
   const pad = (n: number) => String(n).padStart(2, '0');
   const dateStr = (day: number) => `${year}-${pad(month + 1)}-${pad(day)}`;
 
@@ -87,7 +100,7 @@ const CalendarGrid = ({ year, month, items, onCardClick, onEmptyDayClick, onResc
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  className={`min-h-[90px] md:min-h-[110px] border-b border-r border-border p-1 transition-colors
+                  className={`min-h-[150px] border-b border-r border-border p-1.5 transition-colors
                     ${!day ? 'bg-muted/30' : snapshot.isDraggingOver ? 'bg-accent/10' : 'bg-card'}
                     ${day ? 'cursor-pointer' : ''}`}
                   onClick={() => day && dayItems.length === 0 && onEmptyDayClick(dateStr(day))}
@@ -105,13 +118,28 @@ const CalendarGrid = ({ year, month, items, onCardClick, onEmptyDayClick, onResc
                           {...dragProvided.draggableProps}
                           {...dragProvided.dragHandleProps}
                           onClick={(e) => { e.stopPropagation(); onCardClick(item); }}
-                          className="group mb-1 rounded-md bg-background border border-border hover:border-accent/40 p-1.5 cursor-pointer transition-all hover:shadow-sm"
+                          className="group mb-1 rounded-md bg-background border border-border hover:border-accent/40 p-2 cursor-pointer transition-all hover:shadow-sm flex-1"
                         >
-                          <div className="flex items-center gap-1">
-                            <span className={`w-2 h-2 rounded-full shrink-0 ${PILLAR_DOT[item.pillar] || 'bg-muted-foreground'}`} />
-                            <span className="text-[11px] text-foreground truncate leading-tight">{item.title}</span>
+                          <div className="flex items-start gap-1.5 mb-1.5">
+                            <span className={`w-2 h-2 rounded-full shrink-0 mt-0.5 ${PILLAR_DOT[item.pillar] || 'bg-muted-foreground'}`} />
+                            <span className="text-[11px] text-foreground leading-tight break-words">{item.title}</span>
                           </div>
-                          {progressDots(item)}
+                          <div className="flex flex-wrap gap-x-2 gap-y-1">
+                            {STEPS.map((s) => (
+                              <label
+                                key={s.key}
+                                className="flex items-center gap-0.5 cursor-pointer"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <Checkbox
+                                  className="h-3 w-3"
+                                  checked={item[s.key]}
+                                  onCheckedChange={(c) => handleStepToggle(item, s.key, !!c)}
+                                />
+                                <span className="text-[10px]">{s.label}</span>
+                              </label>
+                            ))}
+                          </div>
                         </div>
                       )}
                     </Draggable>
