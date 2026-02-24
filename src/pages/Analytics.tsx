@@ -127,12 +127,15 @@ const FunnelViz = ({ data }: { data: { upload?: number; editor?: number; export?
 };
 
 interface CloudinaryData {
+  id: number;
   plan: string;
-  credits: { usage: number; limit: number; used_percent: number };
-  transformations: { usage: number; credits_usage: number; breakdown: Record<string, number> };
-  storage: { usage: number; credits_usage: number };
-  bandwidth: { usage: number; credits_usage: number };
-  last_updated: string;
+  credits_used: number;
+  credits_limit: number;
+  transformations: number;
+  background_removals: number;
+  storage_bytes: number;
+  bandwidth_bytes: number;
+  updated_at: string;
 }
 
 function useCloudinaryUsage() {
@@ -258,28 +261,28 @@ const Analytics = () => {
             {cloudinaryLoading ? <Skeleton className="h-40 w-full" /> : cloudinary ? (
               <div className="grid grid-cols-2 md:grid-cols-6 gap-6 items-center">
                 <div className="col-span-2 md:col-span-1 flex justify-center">
-                  <CreditsGauge used={cloudinary.credits.usage} limit={cloudinary.credits.limit} />
+                  <CreditsGauge used={cloudinary.credits_used} limit={cloudinary.credits_limit} />
                 </div>
                 <div className="space-y-3 col-span-2 md:col-span-5">
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div>
                       <p className="text-xs text-muted-foreground">Transformations</p>
-                      <p className="text-xl font-bold text-foreground">{cloudinary.transformations.usage.toLocaleString()}</p>
+                      <p className="text-xl font-bold text-foreground">{cloudinary.transformations.toLocaleString()}</p>
                     </div>
                     <div>
                       <p className="text-xs text-muted-foreground">BG Removals</p>
-                      <p className="text-xl font-bold text-foreground">{cloudinary.transformations.breakdown?.background_removal ?? 0}</p>
+                      <p className="text-xl font-bold text-foreground">{cloudinary.background_removals}</p>
                     </div>
                     <div>
                       <p className="text-xs text-muted-foreground">Storage</p>
-                      <p className="text-xl font-bold text-foreground">{formatBytes(cloudinary.storage.usage)}</p>
+                      <p className="text-xl font-bold text-foreground">{formatBytes(cloudinary.storage_bytes)}</p>
                     </div>
                     <div>
                       <p className="text-xs text-muted-foreground">Bandwidth</p>
-                      <p className="text-xl font-bold text-foreground">{formatBytes(cloudinary.bandwidth.usage)}</p>
+                      <p className="text-xl font-bold text-foreground">{formatBytes(cloudinary.bandwidth_bytes)}</p>
                     </div>
                   </div>
-                  <p className="text-[10px] text-muted-foreground">Last updated: {cloudinary.last_updated}</p>
+                  <p className="text-[10px] text-muted-foreground">Last updated: {cloudinary.updated_at}</p>
                 </div>
               </div>
             ) : (
