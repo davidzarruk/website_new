@@ -33,24 +33,24 @@ const MobileListView = ({ year, month, items, onCardClick, onEmptyDayClick }: Mo
         return (
           <div
             key={dateStr}
-            className={`rounded-lg border p-3 ${isToday ? 'border-emerald-500/40 bg-[#222]' : 'border-[#333] bg-[#1a1a1a]'}`}
+            className={`rounded-xl border p-3 ${isToday ? 'border-accent/40 bg-card' : 'border-border bg-card'}`}
             onClick={() => dayItems.length === 0 && onEmptyDayClick(dateStr)}
           >
-            <div className={`text-xs font-medium mb-1 ${isToday ? 'text-emerald-400' : 'text-neutral-500'}`}>
+            <div className={`text-xs font-medium mb-1 ${isToday ? 'text-accent' : 'text-muted-foreground'}`}>
               {format(day, 'EEE, MMM d')}
             </div>
-            {dayItems.length === 0 && <span className="text-xs text-neutral-600">No content</span>}
+            {dayItems.length === 0 && <span className="text-xs text-muted-foreground/50">No content</span>}
             {dayItems.map((item) => (
               <div
                 key={item.id}
                 onClick={(e) => { e.stopPropagation(); onCardClick(item); }}
                 className="flex items-center gap-2 py-1 cursor-pointer"
               >
-                <span className={`w-2 h-2 rounded-full ${PILLAR_DOT[item.pillar] || 'bg-neutral-500'}`} />
-                <span className="text-sm text-neutral-300 truncate">{item.title}</span>
+                <span className={`w-2 h-2 rounded-full ${PILLAR_DOT[item.pillar] || 'bg-muted-foreground'}`} />
+                <span className="text-sm text-foreground truncate">{item.title}</span>
                 <div className="flex gap-0.5 ml-auto">
                   {[item.has_idea, item.has_script, item.has_recording, item.has_edit, item.is_ready].map((s, i) => (
-                    <span key={i} className={`w-1.5 h-1.5 rounded-full ${s ? 'bg-emerald-400' : 'bg-neutral-600'}`} />
+                    <span key={i} className={`w-1.5 h-1.5 rounded-full ${s ? 'bg-accent' : 'bg-border'}`} />
                   ))}
                 </div>
               </div>

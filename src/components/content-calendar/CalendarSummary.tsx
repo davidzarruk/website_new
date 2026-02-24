@@ -42,31 +42,31 @@ const CalendarSummary = ({ items }: CalendarSummaryProps) => {
   });
 
   return (
-    <div className="flex flex-col gap-4 p-4 rounded-xl bg-[#222] border border-[#333]">
+    <div className="flex flex-col gap-4 p-4 rounded-xl bg-card border border-border">
       <div>
         <div className="flex justify-between text-sm mb-1">
-          <span className="text-neutral-400">Overall progress</span>
-          <span className="text-neutral-300 font-medium">{ready}/{total} ready ({pct}%)</span>
+          <span className="text-muted-foreground">Overall progress</span>
+          <span className="text-foreground font-medium">{ready}/{total} ready ({pct}%)</span>
         </div>
-        <Progress value={pct} className="h-2 bg-[#333]" />
+        <Progress value={pct} className="h-2" />
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
         {byPillar.map((p) => (
-          <div key={p.key} className="flex items-center gap-2 text-xs text-neutral-400">
+          <div key={p.key} className="flex items-center gap-2 text-xs text-muted-foreground">
             <span className={`w-2 h-2 rounded-full ${PILLAR_COLORS[p.key]}`} />
             <span>{PILLAR_LABELS[p.key]}</span>
-            <span className="text-neutral-500">{p.ready}/{p.total}</span>
+            <span className="opacity-60">{p.ready}/{p.total}</span>
           </div>
         ))}
       </div>
 
       {upcoming.length > 0 && (
-        <div className="border-t border-[#333] pt-3">
-          <span className="text-xs text-neutral-500 uppercase tracking-wider">This week</span>
+        <div className="border-t border-border pt-3">
+          <span className="text-xs text-muted-foreground uppercase tracking-wider">This week</span>
           <div className="mt-1 flex flex-wrap gap-1">
             {upcoming.slice(0, 5).map((u) => (
-              <span key={u.id} className="text-xs bg-[#2a2a2a] border border-[#333] rounded px-2 py-0.5 text-neutral-300 truncate max-w-[140px]">
+              <span key={u.id} className="text-xs bg-secondary border border-border rounded px-2 py-0.5 text-foreground truncate max-w-[140px]">
                 {u.title}
               </span>
             ))}
