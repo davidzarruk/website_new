@@ -121,8 +121,13 @@ const CalendarGrid = ({ year, month, items, onCardClick, onEmptyDayClick, onResc
                           className="group mb-1 rounded-md bg-background border border-border hover:border-accent/40 p-2 cursor-pointer transition-all hover:shadow-sm flex-1"
                         >
                           <div className="flex items-start gap-1.5 mb-1.5">
-                            <span className={`w-2 h-2 rounded-full shrink-0 mt-0.5 ${PILLAR_DOT[item.pillar] || 'bg-muted-foreground'}`} />
-                            <span className="text-[11px] text-foreground leading-tight break-words">{item.title}</span>
+                            {item.image_url && (
+                              <img src={item.image_url} alt="" className="w-8 h-8 rounded object-cover shrink-0 mt-0.5" />
+                            )}
+                            <div className="flex items-start gap-1.5 min-w-0">
+                              <span className={`w-2 h-2 rounded-full shrink-0 mt-0.5 ${PILLAR_DOT[item.pillar] || 'bg-muted-foreground'}`} />
+                              <span className="text-[11px] text-foreground leading-tight break-words">{item.title}</span>
+                            </div>
                           </div>
                           <div className="flex flex-wrap gap-x-2 gap-y-1">
                             {STEPS.map((s) => (

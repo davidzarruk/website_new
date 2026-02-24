@@ -20,6 +20,8 @@ export interface ContentItem {
   instagram_caption: string | null;
   tiktok_caption: string | null;
   effort: string | null;
+  image_url: string | null;
+  script: string | null;
   created_at: string;
   updated_at: string;
 }
