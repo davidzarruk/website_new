@@ -29,6 +29,7 @@ const ContentCalendar = () => {
       .from('content_calendar')
       .select('*')
       .order('scheduled_date', { ascending: true });
+    console.log('[ContentCalendar] query result:', { data, error });
     if (error) {
       toast.error('Failed to load content');
       console.error(error);
