@@ -60,6 +60,14 @@ export interface TopRace {
   count: number;
 }
 
+export interface UserListItem {
+  id: string;
+  full_name: string | null;
+  username: string | null;
+  created_at: string;
+  points: number;
+}
+
 const supabase = contentCalendarClient;
 
 export function useAnalytics(refreshInterval = 60000) {
@@ -72,6 +80,7 @@ export function useAnalytics(refreshInterval = 60000) {
   const [hourlyActivity, setHourlyActivity] = useState<HourlyActivity[]>([]);
   const [effects, setEffects] = useState<EffectUsage[]>([]);
   const [topRaces, setTopRaces] = useState<TopRace[]>([]);
+  const [userList, setUserList] = useState<UserListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [isLive, setIsLive] = useState(true);
 
@@ -86,6 +95,7 @@ export function useAnalytics(refreshInterval = 60000) {
       hourlyRes,
       effectsRes,
       racesRes,
+      usersRes,
     ] = await Promise.all([
       supabase.from('analytics_summary').select('*').single(),
       supabase.from('analytics_daily_signups').select('*').order('day', { ascending: true }),
@@ -96,6 +106,7 @@ export function useAnalytics(refreshInterval = 60000) {
       supabase.from('analytics_hourly_activity').select('*'),
       supabase.from('analytics_effects').select('*'),
       supabase.from('analytics_top_races').select('*'),
+      supabase.from('user_profiles').select('id, full_name, username, created_at, points').order('created_at', { ascending: false }),
     ]);
 
     if (summaryRes.data) setSummary(summaryRes.data as unknown as AnalyticsSummary);
@@ -107,6 +118,7 @@ export function useAnalytics(refreshInterval = 60000) {
     if (hourlyRes.data) setHourlyActivity(hourlyRes.data as unknown as HourlyActivity[]);
     if (effectsRes.data) setEffects(effectsRes.data as unknown as EffectUsage[]);
     if (racesRes.data) setTopRaces(racesRes.data as unknown as TopRace[]);
+    if (usersRes.data) setUserList(usersRes.data as unknown as UserListItem[]);
 
     setLoading(false);
   }, []);
@@ -129,6 +141,7 @@ export function useAnalytics(refreshInterval = 60000) {
     hourlyActivity,
     effects,
     topRaces,
+    userList,
     loading,
     isLive,
     setIsLive,

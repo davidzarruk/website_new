@@ -2,6 +2,7 @@ import { useAnalytics } from '@/hooks/useAnalytics';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { useState, useEffect } from 'react';
 import { contentCalendarClient } from '@/integrations/content-calendar/client';
 import { Link } from 'react-router-dom';
@@ -203,7 +204,7 @@ const formatBytes = (bytes: number) => {
 const Analytics = () => {
   const {
     summary, dailySignups, dailyPhotos, pageViews, sessions,
-    funnel, hourlyActivity, effects, topRaces, loading, isLive,
+    funnel, hourlyActivity, effects, topRaces, userList, loading, isLive,
   } = useAnalytics();
   const { data: cloudinary, loading: cloudinaryLoading } = useCloudinaryUsage();
 
@@ -248,6 +249,47 @@ const Analytics = () => {
             loading={loading}
           />
         </div>
+
+        {/* User List */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle className="text-base">Registered Users</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {loading ? (
+              <Skeleton className="h-64 w-full" />
+            ) : (
+              <ScrollArea className="h-64 w-full">
+                <div className="space-y-2 pr-4">
+                  {userList.map((user) => (
+                    <div
+                      key={user.id}
+                      className="flex items-center justify-between p-3 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors"
+                    >
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-foreground truncate">
+                          {user.full_name || 'No name'}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          @{user.username || 'no-username'} · {user.points} pts
+                        </p>
+                      </div>
+                      <div className="text-xs text-muted-foreground ml-4">
+                        {new Date(user.created_at).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                  {userList.length === 0 && (
+                    <p className="text-sm text-muted-foreground text-center py-8">No users yet</p>
+                  )}
+                </div>
+              </ScrollArea>
+            )}
+          </CardContent>
+        </Card>
 
         {/* Cloudinary Usage */}
         <Card className="mb-6">
