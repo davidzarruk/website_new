@@ -114,7 +114,7 @@ export function useAnalytics(refreshInterval = 60000) {
       supabase.from('analytics_hourly_activity').select('*'),
       supabase.from('analytics_effects').select('*'),
       supabase.from('analytics_top_races').select('*'),
-      supabase.from('user_profiles').select('id, full_name, username, created_at, points, age, country_code, bio, instagram, tiktok').order('created_at', { ascending: false }),
+      supabase.from('user_profiles').select('id, full_name, username, email, created_at, points, age, country_code, bio, instagram, tiktok').order('created_at', { ascending: false }),
     ]);
 
     if (summaryRes.data) setSummary(summaryRes.data as unknown as AnalyticsSummary);
