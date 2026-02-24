@@ -289,7 +289,9 @@ const Analytics = () => {
                           </div>
                           <div className="flex justify-between items-center">
                             <span className="text-muted-foreground">Country</span>
-                            <span className="text-foreground font-medium text-base">{getCountryFlag(user.country_code) || '🌍'}</span>
+                            <span className="text-foreground font-medium text-base">
+                              {user.country_code ? getCountryFlag(user.country_code) : 'N/A'}
+                            </span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-muted-foreground">Points</span>
