@@ -2,7 +2,8 @@ import { useAnalytics } from '@/hooks/useAnalytics';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
+import { contentCalendarClient } from '@/integrations/content-calendar/client';
 import { Link } from 'react-router-dom';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -134,34 +135,26 @@ interface CloudinaryData {
   last_updated: string;
 }
 
-function useCloudinaryUsage(refreshInterval = 60000) {
+function useCloudinaryUsage() {
   const [data, setData] = useState<CloudinaryData | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetch_ = useCallback(async () => {
-    try {
-      const res = await fetch('https://agegeoxsyebswcpncqcg.supabase.co/functions/v1/cloudinary-usage', {
-        headers: {
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFnZWdlb3hzeWVic3djcG5jcWNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzMzgzNjcsImV4cCI6MjA4NjkxNDM2N30._jBm48fpo8kFVR6UZPvi43FXycMhfqfUz3Lf-XvBLAQ',
-          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFnZWdlb3hzeWVic3djcG5jcWNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzMzgzNjcsImV4cCI6MjA4NjkxNDM2N30._jBm48fpo8kFVR6UZPvi43FXycMhfqfUz3Lf-XvBLAQ',
-        },
-      });
-      if (res.ok) {
-        const result = await res.json();
-        setData(result as CloudinaryData);
-      }
-    } catch {
-      // silently fail
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
   useEffect(() => {
-    fetch_();
-    const interval = setInterval(fetch_, refreshInterval);
-    return () => clearInterval(interval);
-  }, [fetch_, refreshInterval]);
+    const fetchData = async () => {
+      try {
+        const { data: result, error } = await contentCalendarClient
+          .from('cloudinary_usage')
+          .select('*')
+          .single();
+        if (!error && result) setData(result as unknown as CloudinaryData);
+      } catch {
+        // silently fail
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   return { data, loading };
 }
