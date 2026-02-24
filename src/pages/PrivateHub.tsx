@@ -9,6 +9,7 @@ const privateLinks = [
   { label: "Médicos", href: "/medicos" },
   { label: "Dashboard", href: "/dashboard" },
   { label: "Kanban", href: "/kanban" },
+  { label: "Content Calendar", href: "/content-calendar" },
 ];
 
 const PrivateHub = () => {
