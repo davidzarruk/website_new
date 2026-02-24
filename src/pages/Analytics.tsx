@@ -92,12 +92,12 @@ const HeatmapGrid = ({ data }: { data: { day_of_week: number; hour: number; coun
   );
 };
 
-const FunnelViz = ({ data }: { data: { upload: number; editor: number; export: number; saved: number } }) => {
+const FunnelViz = ({ data }: { data: { upload?: number; editor?: number; export?: number; saved?: number } }) => {
   const steps = [
-    { label: 'Upload', value: data.upload },
-    { label: 'Editor', value: data.editor },
-    { label: 'Export', value: data.export },
-    { label: 'Saved', value: data.saved },
+    { label: 'Upload', value: Number(data?.upload ?? 0) },
+    { label: 'Editor', value: Number(data?.editor ?? 0) },
+    { label: 'Export', value: Number(data?.export ?? 0) },
+    { label: 'Saved', value: Number(data?.saved ?? 0) },
   ];
   const max = Math.max(...steps.map(s => s.value), 1);
   return (
