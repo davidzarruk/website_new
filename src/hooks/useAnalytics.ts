@@ -66,6 +66,13 @@ export interface UserListItem {
   username: string | null;
   created_at: string;
   points: number;
+  age: number | null;
+  country_code: string | null;
+  bio: string | null;
+  instagram: string | null;
+  tiktok: string | null;
+  photo_count?: number;
+  race_count?: number;
 }
 
 const supabase = contentCalendarClient;
@@ -106,7 +113,7 @@ export function useAnalytics(refreshInterval = 60000) {
       supabase.from('analytics_hourly_activity').select('*'),
       supabase.from('analytics_effects').select('*'),
       supabase.from('analytics_top_races').select('*'),
-      supabase.from('user_profiles').select('id, full_name, username, created_at, points').order('created_at', { ascending: false }),
+      supabase.from('user_profiles').select('id, full_name, username, created_at, points, age, country_code, bio, instagram, tiktok').order('created_at', { ascending: false }),
     ]);
 
     if (summaryRes.data) setSummary(summaryRes.data as unknown as AnalyticsSummary);
@@ -118,7 +125,28 @@ export function useAnalytics(refreshInterval = 60000) {
     if (hourlyRes.data) setHourlyActivity(hourlyRes.data as unknown as HourlyActivity[]);
     if (effectsRes.data) setEffects(effectsRes.data as unknown as EffectUsage[]);
     if (racesRes.data) setTopRaces(racesRes.data as unknown as TopRace[]);
-    if (usersRes.data) setUserList(usersRes.data as unknown as UserListItem[]);
+    
+    if (usersRes.data) {
+      const users = usersRes.data as unknown as UserListItem[];
+      
+      // Fetch photo and race counts for each user
+      const enrichedUsers = await Promise.all(
+        users.map(async (user) => {
+          const [photoRes, raceRes] = await Promise.all([
+            supabase.from('user_photos').select('id', { count: 'exact', head: true }).eq('user_id', user.id),
+            supabase.from('user_race_history').select('id', { count: 'exact', head: true }).eq('user_id', user.id),
+          ]);
+          
+          return {
+            ...user,
+            photo_count: photoRes.count ?? 0,
+            race_count: raceRes.count ?? 0,
+          };
+        })
+      );
+      
+      setUserList(enrichedUsers);
+    }
 
     setLoading(false);
   }, []);
