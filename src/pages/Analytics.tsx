@@ -1,12 +1,16 @@
 import { useAnalytics } from '@/hooks/useAnalytics';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useState } from 'react';
+import { Badge } from '@/components/ui/badge';
+import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   BarChart, Bar, PieChart, Pie, Cell,
 } from 'recharts';
+import { supabase } from '@/integrations/supabase/client';
+
+
 
 const ACCENT_COLORS = [
   'hsl(24, 70%, 50%)', 'hsl(160, 60%, 45%)', 'hsl(220, 60%, 55%)',
@@ -121,11 +125,83 @@ const FunnelViz = ({ data }: { data: { upload?: number; editor?: number; export?
   );
 };
 
+interface CloudinaryData {
+  plan: string;
+  credits: { usage: number; limit: number; used_percent: number };
+  transformations: { usage: number; credits_usage: number; breakdown: Record<string, number> };
+  storage: { usage: number; credits_usage: number };
+  bandwidth: { usage: number; credits_usage: number };
+  last_updated: string;
+}
+
+function useCloudinaryUsage(refreshInterval = 60000) {
+  const [data, setData] = useState<CloudinaryData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetch_ = useCallback(async () => {
+    try {
+      const { data: result, error } = await supabase.functions.invoke('cloudinary-usage');
+      if (!error && result) setData(result as CloudinaryData);
+    } catch {
+      // silently fail
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetch_();
+    const interval = setInterval(fetch_, refreshInterval);
+    return () => clearInterval(interval);
+  }, [fetch_, refreshInterval]);
+
+  return { data, loading };
+}
+
+const CreditsGauge = ({ used, limit }: { used: number; limit: number }) => {
+  const pct = limit > 0 ? (used / limit) * 100 : 0;
+  const color = pct < 50 ? 'hsl(160, 60%, 45%)' : pct < 80 ? 'hsl(45, 80%, 50%)' : 'hsl(0, 65%, 55%)';
+  const radius = 54;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference - (pct / 100) * circumference;
+
+  return (
+    <div className="flex flex-col items-center">
+      <svg width="140" height="140" viewBox="0 0 140 140">
+        <circle cx="70" cy="70" r={radius} fill="none" strokeWidth="10" className="stroke-muted" />
+        <circle
+          cx="70" cy="70" r={radius} fill="none" strokeWidth="10"
+          stroke={color}
+          strokeDasharray={circumference}
+          strokeDashoffset={offset}
+          strokeLinecap="round"
+          transform="rotate(-90 70 70)"
+          style={{ transition: 'stroke-dashoffset 0.6s ease' }}
+        />
+        <text x="70" y="62" textAnchor="middle" className="fill-foreground text-lg font-bold" fontSize="18">
+          {used.toFixed(1)}
+        </text>
+        <text x="70" y="82" textAnchor="middle" className="fill-muted-foreground" fontSize="12">
+          / {limit}
+        </text>
+      </svg>
+      <p className="text-xs text-muted-foreground mt-1">Credits Used</p>
+    </div>
+  );
+};
+
+const formatBytes = (bytes: number) => {
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  if (bytes < 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`;
+};
+
 const Analytics = () => {
   const {
     summary, dailySignups, dailyPhotos, pageViews, sessions,
     funnel, hourlyActivity, effects, topRaces, loading, isLive,
   } = useAnalytics();
+  const { data: cloudinary, loading: cloudinaryLoading } = useCloudinaryUsage();
 
   const avgSessionMin = sessions.length > 0
     ? (sessions.reduce((a, s) => a + s.duration_seconds, 0) / sessions.length / 60).toFixed(1)
@@ -168,6 +244,48 @@ const Analytics = () => {
             loading={loading}
           />
         </div>
+
+        {/* Cloudinary Usage */}
+        <Card className="mb-6">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base">Cloudinary Usage</CardTitle>
+              {cloudinary && <Badge variant="secondary">{cloudinary.plan}</Badge>}
+            </div>
+          </CardHeader>
+          <CardContent>
+            {cloudinaryLoading ? <Skeleton className="h-40 w-full" /> : cloudinary ? (
+              <div className="grid grid-cols-2 md:grid-cols-6 gap-6 items-center">
+                <div className="col-span-2 md:col-span-1 flex justify-center">
+                  <CreditsGauge used={cloudinary.credits.usage} limit={cloudinary.credits.limit} />
+                </div>
+                <div className="space-y-3 col-span-2 md:col-span-5">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div>
+                      <p className="text-xs text-muted-foreground">Transformations</p>
+                      <p className="text-xl font-bold text-foreground">{cloudinary.transformations.usage.toLocaleString()}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">BG Removals</p>
+                      <p className="text-xl font-bold text-foreground">{cloudinary.transformations.breakdown?.background_removal ?? 0}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Storage</p>
+                      <p className="text-xl font-bold text-foreground">{formatBytes(cloudinary.storage.usage)}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Bandwidth</p>
+                      <p className="text-xl font-bold text-foreground">{formatBytes(cloudinary.bandwidth.usage)}</p>
+                    </div>
+                  </div>
+                  <p className="text-[10px] text-muted-foreground">Last updated: {cloudinary.last_updated}</p>
+                </div>
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">Failed to load Cloudinary data</p>
+            )}
+          </CardContent>
+        </Card>
 
         {/* Row 2: Line Charts */}
         <div className="grid md:grid-cols-2 gap-4 mb-6">
