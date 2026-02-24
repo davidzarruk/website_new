@@ -14,7 +14,7 @@ const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 interface CalendarGridProps {
   year: number;
-  month: number; // 0-indexed
+  month: number;
   items: ContentItem[];
   onCardClick: (item: ContentItem) => void;
   onEmptyDayClick: (dateStr: string) => void;
@@ -37,7 +37,7 @@ function progressDots(item: ContentItem) {
   return (
     <div className="flex gap-0.5 mt-0.5">
       {steps.map((s, i) => (
-        <span key={i} className={`w-1.5 h-1.5 rounded-full ${s ? 'bg-emerald-400' : 'bg-neutral-600'}`} />
+        <span key={i} className={`w-1.5 h-1.5 rounded-full ${s ? 'bg-accent' : 'bg-border'}`} />
       ))}
     </div>
   );
@@ -74,9 +74,9 @@ const CalendarGrid = ({ year, month, items, onCardClick, onEmptyDayClick, onResc
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <div className="grid grid-cols-7 border-t border-l border-[#333]">
+      <div className="grid grid-cols-7 border-t border-l border-border rounded-lg overflow-hidden">
         {DAY_NAMES.map((d) => (
-          <div key={d} className="text-xs text-neutral-500 text-center py-2 border-b border-r border-[#333] bg-[#1a1a1a]">{d}</div>
+          <div key={d} className="text-xs text-muted-foreground text-center py-2 border-b border-r border-border bg-secondary/50 font-medium">{d}</div>
         ))}
         {cells.map((day, idx) => {
           const key = day ? dateStr(day) : `empty-${idx}`;
@@ -87,13 +87,13 @@ const CalendarGrid = ({ year, month, items, onCardClick, onEmptyDayClick, onResc
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  className={`min-h-[90px] md:min-h-[110px] border-b border-r border-[#333] p-1 transition-colors
-                    ${!day ? 'bg-[#141414]' : snapshot.isDraggingOver ? 'bg-[#2a2a2a]' : 'bg-[#1a1a1a]'}
+                  className={`min-h-[90px] md:min-h-[110px] border-b border-r border-border p-1 transition-colors
+                    ${!day ? 'bg-muted/30' : snapshot.isDraggingOver ? 'bg-accent/10' : 'bg-card'}
                     ${day ? 'cursor-pointer' : ''}`}
                   onClick={() => day && dayItems.length === 0 && onEmptyDayClick(dateStr(day))}
                 >
                   {day && (
-                    <span className={`text-xs font-medium block mb-1 ${isToday(day) ? 'text-emerald-400' : 'text-neutral-500'}`}>
+                    <span className={`text-xs font-medium block mb-1 ${isToday(day) ? 'text-accent' : 'text-muted-foreground'}`}>
                       {day}
                     </span>
                   )}
@@ -105,11 +105,11 @@ const CalendarGrid = ({ year, month, items, onCardClick, onEmptyDayClick, onResc
                           {...dragProvided.draggableProps}
                           {...dragProvided.dragHandleProps}
                           onClick={(e) => { e.stopPropagation(); onCardClick(item); }}
-                          className="group mb-1 rounded bg-[#252525] border border-[#333] hover:border-neutral-500 p-1.5 cursor-pointer transition-all"
+                          className="group mb-1 rounded-md bg-background border border-border hover:border-accent/40 p-1.5 cursor-pointer transition-all hover:shadow-sm"
                         >
                           <div className="flex items-center gap-1">
-                            <span className={`w-2 h-2 rounded-full shrink-0 ${PILLAR_DOT[item.pillar] || 'bg-neutral-500'}`} />
-                            <span className="text-[11px] text-neutral-300 truncate leading-tight">{item.title}</span>
+                            <span className={`w-2 h-2 rounded-full shrink-0 ${PILLAR_DOT[item.pillar] || 'bg-muted-foreground'}`} />
+                            <span className="text-[11px] text-foreground truncate leading-tight">{item.title}</span>
                           </div>
                           {progressDots(item)}
                         </div>

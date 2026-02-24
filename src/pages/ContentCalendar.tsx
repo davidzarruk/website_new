@@ -76,33 +76,32 @@ const ContentCalendar = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#1a1a1a] text-neutral-200">
+    <div className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-6xl px-4 py-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <button onClick={() => navigate('/private')} className="text-sm text-neutral-500 hover:text-neutral-300 transition-colors">← Back</button>
-            <h1 className="text-xl font-bold text-neutral-100 font-sans">Content Calendar</h1>
+            <button onClick={() => navigate('/private')} className="text-sm text-muted-foreground hover:text-foreground transition-colors">← Back</button>
+            <h1 className="font-heading text-2xl text-foreground">Content Calendar</h1>
           </div>
         </div>
 
-        {/* Summary */}
         <CalendarSummary items={items} />
 
         {/* Month nav */}
         <div className="flex items-center justify-between mt-6 mb-3">
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" onClick={prev} className="text-neutral-400 hover:text-neutral-200"><ChevronLeft className="w-4 h-4" /></Button>
-            <span className="text-sm font-medium text-neutral-200 min-w-[140px] text-center">
+            <Button variant="ghost" size="icon" onClick={prev} className="text-muted-foreground hover:text-foreground"><ChevronLeft className="w-4 h-4" /></Button>
+            <span className="font-heading text-lg text-foreground min-w-[160px] text-center">
               {format(new Date(year, month), 'MMMM yyyy')}
             </span>
-            <Button variant="ghost" size="icon" onClick={next} className="text-neutral-400 hover:text-neutral-200"><ChevronRight className="w-4 h-4" /></Button>
+            <Button variant="ghost" size="icon" onClick={next} className="text-muted-foreground hover:text-foreground"><ChevronRight className="w-4 h-4" /></Button>
           </div>
-          <Button variant="outline" size="sm" onClick={goToday} className="border-[#333] text-neutral-300 hover:bg-[#252525]">Today</Button>
+          <Button variant="outline" size="sm" onClick={goToday}>Today</Button>
         </div>
 
         {loading ? (
-          <div className="text-center py-20 text-neutral-500">Loading…</div>
+          <div className="text-center py-20 text-muted-foreground">Loading…</div>
         ) : isMobile ? (
           <MobileListView year={year} month={month} items={items} onCardClick={openEdit} onEmptyDayClick={openCreate} />
         ) : (

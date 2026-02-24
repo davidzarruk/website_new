@@ -37,36 +37,19 @@ interface ContentCardModalProps {
 
 const ContentCardModal = ({ open, onOpenChange, item, defaultDate, onSave, onDelete }: ContentCardModalProps) => {
   const [form, setForm] = useState({
-    title: '',
-    pillar: 'hot_take',
-    scheduled_date: '',
-    description: '',
-    has_idea: false,
-    has_script: false,
-    has_recording: false,
-    has_edit: false,
-    is_ready: false,
-    notes: '',
-    instagram_caption: '',
-    tiktok_caption: '',
-    effort: 'low',
+    title: '', pillar: 'hot_take', scheduled_date: '', description: '',
+    has_idea: false, has_script: false, has_recording: false, has_edit: false, is_ready: false,
+    notes: '', instagram_caption: '', tiktok_caption: '', effort: 'low',
   });
 
   useEffect(() => {
     if (item) {
       setForm({
-        title: item.title || '',
-        pillar: item.pillar || 'hot_take',
-        scheduled_date: item.scheduled_date || '',
-        description: item.description || '',
-        has_idea: item.has_idea,
-        has_script: item.has_script,
-        has_recording: item.has_recording,
-        has_edit: item.has_edit,
-        is_ready: item.is_ready,
-        notes: item.notes || '',
-        instagram_caption: item.instagram_caption || '',
-        tiktok_caption: item.tiktok_caption || '',
+        title: item.title || '', pillar: item.pillar || 'hot_take',
+        scheduled_date: item.scheduled_date || '', description: item.description || '',
+        has_idea: item.has_idea, has_script: item.has_script, has_recording: item.has_recording,
+        has_edit: item.has_edit, is_ready: item.is_ready, notes: item.notes || '',
+        instagram_caption: item.instagram_caption || '', tiktok_caption: item.tiktok_caption || '',
         effort: item.effort || 'low',
       });
     } else {
@@ -84,10 +67,8 @@ const ContentCardModal = ({ open, onOpenChange, item, defaultDate, onSave, onDel
     const idx = stepOrder.indexOf(key);
     const updated = { ...form };
     if (checked) {
-      // check all previous
       for (let i = 0; i <= idx; i++) updated[stepOrder[i]] = true;
     } else {
-      // uncheck this and all after
       for (let i = idx; i < stepOrder.length; i++) updated[stepOrder[i]] = false;
     }
     setForm(updated);
@@ -99,81 +80,74 @@ const ContentCardModal = ({ open, onOpenChange, item, defaultDate, onSave, onDel
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg bg-[#222] border-[#333] text-neutral-200 max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-neutral-100">{item ? 'Edit Content' : 'New Content'}</DialogTitle>
+          <DialogTitle>{item ? 'Edit Content' : 'New Content'}</DialogTitle>
         </DialogHeader>
 
         <div className="grid gap-4">
           <div>
-            <Label className="text-neutral-400 text-xs">Title</Label>
-            <Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })}
-              className="bg-[#1a1a1a] border-[#333] text-neutral-200" />
+            <Label className="text-muted-foreground text-xs">Title</Label>
+            <Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <Label className="text-neutral-400 text-xs">Pillar</Label>
+              <Label className="text-muted-foreground text-xs">Pillar</Label>
               <Select value={form.pillar} onValueChange={(v) => setForm({ ...form, pillar: v })}>
-                <SelectTrigger className="bg-[#1a1a1a] border-[#333] text-neutral-200"><SelectValue /></SelectTrigger>
-                <SelectContent className="bg-[#222] border-[#333]">
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
                   {PILLARS.map((p) => <SelectItem key={p.value} value={p.value}>{p.label}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>
             <div>
-              <Label className="text-neutral-400 text-xs">Scheduled date</Label>
+              <Label className="text-muted-foreground text-xs">Scheduled date</Label>
               <Input type="date" value={form.scheduled_date}
-                onChange={(e) => setForm({ ...form, scheduled_date: e.target.value })}
-                className="bg-[#1a1a1a] border-[#333] text-neutral-200" />
+                onChange={(e) => setForm({ ...form, scheduled_date: e.target.value })} />
             </div>
           </div>
 
           <div>
-            <Label className="text-neutral-400 text-xs">Description</Label>
-            <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })}
-              className="bg-[#1a1a1a] border-[#333] text-neutral-200 min-h-[60px]" />
+            <Label className="text-muted-foreground text-xs">Description</Label>
+            <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="min-h-[60px]" />
           </div>
 
           <div>
-            <Label className="text-neutral-400 text-xs mb-2 block">Progress</Label>
+            <Label className="text-muted-foreground text-xs mb-2 block">Progress</Label>
             <div className="flex flex-wrap gap-3">
               {STEPS.map((s) => (
                 <label key={s.key} className="flex items-center gap-1.5 text-sm cursor-pointer">
                   <Checkbox
                     checked={form[s.key]}
                     onCheckedChange={(c) => handleStepChange(s.key, !!c)}
-                    className="border-[#555] data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600"
                   />
-                  <span className="text-neutral-300">{s.label}</span>
+                  <span className="text-foreground">{s.label}</span>
                 </label>
               ))}
             </div>
           </div>
 
           <div>
-            <Label className="text-neutral-400 text-xs">Notes</Label>
-            <Textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })}
-              className="bg-[#1a1a1a] border-[#333] text-neutral-200 min-h-[50px]" />
+            <Label className="text-muted-foreground text-xs">Notes</Label>
+            <Textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} className="min-h-[50px]" />
           </div>
 
           <div>
-            <Label className="text-neutral-400 text-xs">Instagram caption</Label>
-            <Textarea value={form.instagram_caption} onChange={(e) => setForm({ ...form, instagram_caption: e.target.value })}
-              className="bg-[#1a1a1a] border-[#333] text-neutral-200 min-h-[50px]" />
+            <Label className="text-muted-foreground text-xs">Instagram caption</Label>
+            <Textarea value={form.instagram_caption} onChange={(e) => setForm({ ...form, instagram_caption: e.target.value })} className="min-h-[50px]" />
           </div>
 
           <div>
-            <Label className="text-neutral-400 text-xs">TikTok caption</Label>
-            <Textarea value={form.tiktok_caption} onChange={(e) => setForm({ ...form, tiktok_caption: e.target.value })}
-              className="bg-[#1a1a1a] border-[#333] text-neutral-200 min-h-[50px]" />
+            <Label className="text-muted-foreground text-xs">TikTok caption</Label>
+            <Textarea value={form.tiktok_caption} onChange={(e) => setForm({ ...form, tiktok_caption: e.target.value })} className="min-h-[50px]" />
           </div>
 
           <div>
-            <Label className="text-neutral-400 text-xs">Effort</Label>
+            <Label className="text-muted-foreground text-xs">Effort</Label>
             <Select value={form.effort} onValueChange={(v) => setForm({ ...form, effort: v })}>
-              <SelectTrigger className="bg-[#1a1a1a] border-[#333] text-neutral-200 w-32"><SelectValue /></SelectTrigger>
-              <SelectContent className="bg-[#222] border-[#333]">
+              <SelectTrigger className="w-32"><SelectValue /></SelectTrigger>
+              <SelectContent>
                 <SelectItem value="low">Low</SelectItem>
                 <SelectItem value="medium">Medium</SelectItem>
                 <SelectItem value="high">High</SelectItem>
@@ -186,7 +160,7 @@ const ContentCardModal = ({ open, onOpenChange, item, defaultDate, onSave, onDel
           {item && onDelete && (
             <Button variant="destructive" size="sm" onClick={() => onDelete(item.id)}>Delete</Button>
           )}
-          <Button onClick={handleSave} size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white">Save</Button>
+          <Button onClick={handleSave} size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90">Save</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
