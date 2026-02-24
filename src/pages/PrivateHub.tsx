@@ -10,6 +10,7 @@ const privateLinks = [
   { label: "Dashboard", href: "/dashboard" },
   { label: "Kanban", href: "/kanban" },
   { label: "Content Calendar", href: "/content-calendar" },
+  { label: "DR Analytics", href: "/analytics" },
 ];
 
 const PrivateHub = () => {
