@@ -4,6 +4,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useState, useEffect } from 'react';
+import { getCountryFlag } from '@/lib/countryFlags';
 import { contentCalendarClient } from '@/integrations/content-calendar/client';
 import { Link } from 'react-router-dom';
 import {
@@ -296,7 +297,7 @@ const Analytics = () => {
                         </div>
                         <div className="flex items-center gap-1">
                           <span className="text-muted-foreground">Country:</span>
-                          <span className="text-foreground font-medium">{user.country_code || 'N/A'}</span>
+                          <span className="text-foreground font-medium text-lg">{getCountryFlag(user.country_code) || '🌍'}</span>
                         </div>
                         <div className="flex items-center gap-1">
                           <span className="text-muted-foreground">Points:</span>
