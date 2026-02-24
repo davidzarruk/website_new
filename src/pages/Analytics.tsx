@@ -8,7 +8,7 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   BarChart, Bar, PieChart, Pie, Cell,
 } from 'recharts';
-import { supabase } from '@/integrations/supabase/client';
+
 
 
 
@@ -140,8 +140,16 @@ function useCloudinaryUsage(refreshInterval = 60000) {
 
   const fetch_ = useCallback(async () => {
     try {
-      const { data: result, error } = await supabase.functions.invoke('cloudinary-usage');
-      if (!error && result) setData(result as CloudinaryData);
+      const res = await fetch('https://agegeoxsyebswcpncqcg.supabase.co/functions/v1/cloudinary-usage', {
+        headers: {
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFnZWdlb3hzeWVic3djcG5jcWNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzMzgzNjcsImV4cCI6MjA4NjkxNDM2N30._jBm48fpo8kFVR6UZPvi43FXycMhfqfUz3Lf-XvBLAQ',
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFnZWdlb3hzeWVic3djcG5jcWNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzMzgzNjcsImV4cCI6MjA4NjkxNDM2N30._jBm48fpo8kFVR6UZPvi43FXycMhfqfUz3Lf-XvBLAQ',
+        },
+      });
+      if (res.ok) {
+        const result = await res.json();
+        setData(result as CloudinaryData);
+      }
     } catch {
       // silently fail
     } finally {
