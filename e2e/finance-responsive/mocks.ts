@@ -15,11 +15,27 @@ export const syntheticSnapshot = snapshotSchema.parse({
   }],
 });
 
+export const syntheticPortfolio = snapshotSchema.parse({
+  version: 1, asOf: '2026-11-20T12:00:00Z', baseCurrency: 'USD', fx: { EUR: 1.1 },
+  sources: [{ id: 'synthetic', label: 'Fuente de prueba', asOf: '2026-11-20T12:00:00Z', status: 'ok' }],
+  accounts: [0, 1].map(i => ({
+    id: `synthetic-${i}`, label: `Cuenta de prueba ${i}`, ownership: 'joint', sourceId: 'synthetic', balanceScope: `scope-${i}`,
+    holdings: [
+      { symbol: i ? 'CRYPTO/BTC' : 'BTC', name: 'Bitcoin', assetClass: 'Cripto', currency: 'USD', quantity: 0.01, marketValue: 1000, costBasis: i ? null : 800 },
+      { symbol: i ? 'CRYPTO/ETH' : 'ETH', name: 'Ethereum', assetClass: 'Cripto', currency: 'USD', quantity: 0.1, marketValue: 300, costBasis: null },
+      { symbol: 'SPY', name: 'S&P 500 · SPY', assetClass: 'ETF', currency: 'USD', quantity: 3, marketValue: 1500, costBasis: 1200 },
+      { symbol: 'QQQ', name: 'Nasdaq · QQQ', assetClass: 'ETF', currency: 'USD', quantity: 1, marketValue: 400, costBasis: null },
+    ],
+    cash: [{ currency: 'USD', amount: i ? -50 : 250 }],
+  })),
+});
+
 export const supabase = {
   auth: { getUser: async () => ({ data: { user }, error: null }) },
   from: () => ({ select: () => ({ eq: () => ({ maybeSingle: async () => {
     const state = new URLSearchParams(location.search).get('state');
     if (state === 'error') return { data: null, error: { message: 'Synthetic offline error' } };
-    return { data: state === 'loaded' ? { snapshot: syntheticSnapshot, imported_at: syntheticSnapshot.asOf } : null, error: null };
+    const snapshot = state === 'portfolio' ? syntheticPortfolio : syntheticSnapshot;
+    return { data: ['loaded', 'portfolio'].includes(state ?? '') ? { snapshot, imported_at: snapshot.asOf } : null, error: null };
   } }) }) }),
 };

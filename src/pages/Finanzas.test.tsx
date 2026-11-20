@@ -105,11 +105,23 @@ it('clears private rendered state on identity change', async () => {
     expect(div.textContent).not.toContain('Datos al');
 });
 
-it('renders separated ownership, negative cash, partial totals and explicit consolidated selection',async()=>{
+it('shows no donut slices for an all-debt snapshot and keeps the signed total',async()=>{
+ repo.load.mockResolvedValueOnce({snapshot:{...empty,sources:[{id:'s',label:'Synthetic',asOf:empty.asOf,status:'ok'}],accounts:[{id:'a',label:'Synthetic',balanceScope:'a',ownership:'joint',sourceId:'s',holdings:[],cash:[{currency:'USD',amount:-50}]}]},importedAt:empty.asOf});
+ await mount();
+ expect(div.querySelectorAll('.recharts-pie-sector')).toHaveLength(0);
+ expect(div.textContent?.match(/Sin valores positivos incluidos para graficar/g)).toHaveLength(2);
+ expect(div.querySelector('tbody tr')?.textContent).toContain('-US$');
+ expect(div.textContent).toContain('Deuda / posiciones negativas incluidas');
+});
+it('renders one economic-asset table by default with signed cash and partial totals',async()=>{
  const source={id:'broker',label:'Fuente de prueba',asOf:'2020-01-01T00:00:00Z',status:'ok'};
  const account={id:'synthetic',label:'Cuenta de prueba',ownership:'laura',sourceId:'broker',balanceScope:'one',holdings:[{symbol:'TEST',name:'Activo de prueba',assetClass:'Acciones',currency:'EUR',quantity:1,marketValue:10,costBasis:null}],cash:[{currency:'USD',amount:-2}]};
  repo.load.mockResolvedValueOnce({snapshot:{version:1,asOf:source.asOf,baseCurrency:'USD',fx:{},sources:[source],accounts:[account,{...account,id:'joint-test',balanceScope:'two',ownership:'joint'}]},importedAt:source.asOf});
- await mount();expect(div.textContent).toContain('Laura individual');expect(div.textContent).toContain('Laura y David conjunta');expect(div.textContent).toContain('Total parcial');expect(div.textContent).toContain('Costo no disponible');expect(div.textContent).toContain('desactualizada');
- const select=div.querySelector('select')!;await act(async()=>{select.value='all';select.dispatchEvent(new Event('change',{bubbles:true}));});
- expect(div.textContent).toContain('Consolidado · todas las cuentas');expect(div.textContent).toContain('No es rentabilidad histórica');
+ await mount();expect(div.textContent).toContain('Consolidado · todas las cuentas');
+ expect(div.querySelectorAll('table')).toHaveLength(1);
+ expect(div.querySelectorAll('tbody tr')).toHaveLength(2);
+ expect(div.querySelector('thead')?.textContent).not.toContain('Cuenta');
+ expect(div.textContent).toContain('Total parcial');expect(div.textContent).toContain('Costo no disponible');expect(div.textContent).toContain('desactualizada');
+ expect(div.textContent).toContain('Distribución por activo');expect(div.textContent).toContain('Distribución por clase');
+ expect(div.textContent).toContain('No es rentabilidad histórica');
 });

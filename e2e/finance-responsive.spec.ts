@@ -56,9 +56,36 @@ for (const width of [320, 390]) {
       return { overflow: getComputedStyle(container).overflowX, scrollable: container.scrollWidth > container.clientWidth, moved: container.scrollLeft > 0 };
     }));
     expect(scrollers).toEqual([{ overflow: 'auto', scrollable: true, moved: true }]);
-    await page.getByRole('combobox').selectOption('all');
+    await expect(page.getByRole('combobox')).toHaveValue('USD');
+    await expect(page.getByRole('region', { name: 'Tabla consolidada de activos' })).toBeVisible();
+    await expect(page.locator('.recharts-pie-sector')).toHaveCount(2);
+    await page.getByText('Fuentes, advertencias y detalle por ubicación', { exact: true }).click();
     await expect(page.getByRole('heading', { name: 'Consolidado · todas las cuentas' })).toBeVisible();
     await expectContained(page);
+  });
+
+  test(`economic assets consolidate by default with accessible chart legends at ${width}px`, async ({ page }, testInfo) => {
+    const errors: string[] = [];
+    page.on('pageerror', error => errors.push(error.message));
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto('/?state=portfolio');
+    await expect(page.locator('table')).toHaveCount(1);
+    await expect(page.locator('tbody tr')).toHaveCount(5);
+    for (const symbol of ['BTC', 'ETH', 'SPY', 'QQQ']) {
+      await expect(page.locator('tbody tr').filter({ has: page.getByText(symbol, { exact: true }) })).toHaveCount(1);
+    }
+    await expect(page.locator('tbody tr').filter({ has: page.getByText('BTC', { exact: true }) })).toContainText('Parcial · solo costo conocido');
+    await expect(page.getByRole('region', { name: 'Distribución por activo', exact: true }).getByRole('listitem')).toHaveCount(5);
+    await expect(page.locator('.recharts-pie-sector')).toHaveCount(8);
+    await expectContained(page);
+    expect(await page.locator('details').evaluateAll(nodes => nodes.every(n => !n.hasAttribute('open')))).toBe(true);
+    await page.screenshot({ path: testInfo.outputPath(`consolidated-${width}.png`), fullPage: true });
+    await page.getByRole('combobox').selectOption('EUR');
+    await expect(page.getByText('Valor neto incluido · EUR', { exact: true })).toBeVisible();
+    await expectContained(page);
+    await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+    await expectContained(page);
+    expect(errors).toEqual([]);
   });
 
   test(`empty and error cards fit at ${width}px`, async ({ page }) => {
