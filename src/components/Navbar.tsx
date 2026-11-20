@@ -70,25 +70,37 @@ const Navbar = () => {
           </li>
         </ul>
 
-        {/* Mobile toggle */}
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden text-foreground"
-          aria-label="Toggle menu"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            {mobileOpen ? (
-              <path d="M18 6L6 18M6 6l12 12" />
-            ) : (
-              <path d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
-        </button>
+        {/* Mobile: keep sign-in visible without opening the menu. */}
+        <div className="flex shrink-0 items-center gap-2 md:hidden">
+          <a
+            data-mobile-auth
+            href={user ? "/private" : "/login"}
+            className="inline-flex min-h-11 items-center justify-center rounded-lg border border-border bg-background/90 px-3 text-sm font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            {user ? "Mi área" : "Ingresar"}
+          </a>
+          <button
+            type="button"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="inline-flex min-h-11 min-w-11 items-center justify-center text-foreground"
+            aria-label={mobileOpen ? "Cerrar menú" : "Abrir menú"}
+            aria-controls="mobile-navigation"
+            aria-expanded={mobileOpen}
+          >
+            <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              {mobileOpen ? (
+                <path d="M18 6L6 18M6 6l12 12" />
+              ) : (
+                <path d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden bg-background/95 backdrop-blur-md border-t border-border px-6 pb-4">
+        <div id="mobile-navigation" className="md:hidden bg-background/95 backdrop-blur-md border-t border-border px-6 pb-4">
           <ul className="flex flex-col gap-3 pt-2">
             {navItems.map((item) => (
               <li key={item.href}>
