@@ -64,4 +64,10 @@ The local file limit measures original file bytes; the SQL limit measures normal
 
 ## Verification
 
-`npm ci --legacy-peer-deps --ignore-scripts` is needed because the existing lockfile omits Testing Library's DOM peer; no lockfile/dependency upgrade was made. UI tests use React DOM directly. Run `npm test`, `npx tsc --noEmit -p tsconfig.app.json`, `npm run build`. No deployment, remote database changes, credential reads, commit or push is part of this implementation.
+`npm ci --legacy-peer-deps --ignore-scripts` is needed because the existing lockfile omits Testing Library's DOM peer. UI tests use React DOM directly. Run `npm test`, `npx tsc --noEmit -p tsconfig.app.json`, `npm run build`. No deployment, remote database changes, credential reads, commit or push is part of this implementation.
+
+### Responsive browser regressions
+
+Install the test browsers once with `npx playwright install chromium webkit`, then run `npm run test:responsive`. The isolated Vite server binds to `127.0.0.1:8796` and mounts the real Finanzas component/styles with test-only auth/client aliases in `e2e/finance-responsive/vite.config.ts`. Neither production authentication nor Supabase configuration is changed. All balances, labels and the owner ID in the harness are synthetic; no real session or backend is used. This harness is not a production build entry point.
+
+The browser tests cover 320px/390px Chromium and iPhone-emulated WebKit layouts, empty/error/loaded/consolidated states, long labels and source messages, large signed currency values, and local import preview/discard at 200% text size. They assert document and card/control bounds without hidden overflow and verify that holdings tables scroll within their own container. Type-check the harness with `npx tsc --noEmit -p e2e/tsconfig.json`.

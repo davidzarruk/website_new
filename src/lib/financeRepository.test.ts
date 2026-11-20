@@ -16,6 +16,14 @@ it('allows only David and scopes every request to verified auth identity, never 
     expect(await createFinanceRepository(client as never).load()).toBeNull();
     expect(eq).toHaveBeenCalledWith('user_id', 'owner');
 });
+it.each(['PGRST205', '42P01'])('reports unprovisioned storage rather than blaming the session for %s', async code => {
+ const client = { auth: { getUser: async () => ({ data: { user: { id: 'owner', email: 'davidzarruk@gmail.com' } }, error: null }) }, from: () => ({ select: () => ({ eq: () => ({ maybeSingle: async () => ({ data: null, error: { code, message: 'private backend detail' } }) }) }) }) };
+ await expect(createFinanceRepository(client as never).load()).rejects.toThrow('El almacenamiento privado de Finanzas aún no está configurado. Falta activar la base de datos; no es un problema de tu sesión.');
+});
+it('does not expose backend details for other storage errors', async () => {
+ const client = { auth: { getUser: async () => ({ data: { user: { id: 'owner', email: 'davidzarruk@gmail.com' } }, error: null }) }, from: () => ({ select: () => ({ eq: () => ({ maybeSingle: async () => ({ data: null, error: { code: '42501', message: 'private backend detail' } }) }) }) }) };
+ await expect(createFinanceRepository(client as never).load()).rejects.toThrow('No se pudo leer la instantánea privada. Verifica la conexión y la configuración de acceso.');
+});
 it('denies all database access to a different signed-in user', async () => {
     const client = { auth: { getUser: async () => ({ data: { user: { id: 'other', email: 'other@example.com' } }, error: null }) }, from: vi.fn() };
     await expect(createFinanceRepository(client as never).load()).rejects.toThrow();

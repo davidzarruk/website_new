@@ -16,6 +16,8 @@ export function createFinanceRepository(client: SupabaseClient) {
     async function read(id: string) {
         await checkIdentity(id);
         const { data, error } = await client.from('finance_snapshots').select('snapshot, imported_at').eq('user_id', id).maybeSingle();
+        if (error?.code === 'PGRST205' || error?.code === '42P01')
+            throw new Error('El almacenamiento privado de Finanzas aún no está configurado. Falta activar la base de datos; no es un problema de tu sesión.');
         if (error) throw new Error('No se pudo leer la instantánea privada. Verifica la conexión y la configuración de acceso.');
         const result = data ? { snapshot: snapshotSchema.parse(data.snapshot), importedAt: data.imported_at } : null;
         await checkIdentity(id);
