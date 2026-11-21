@@ -26,6 +26,14 @@ it('keeps arbitrary asset classes numeric and cash separate without label collis
  expect(Object.values(v.allocation).reduce((a,b)=>a+b,0)).toBe(15);
  expect(v.total).toBe(15);
 });
+it('accepts optional explicit ISO custody country or unknown without weakening strict accounts', () => {
+ const valid = { ...emptySnapshot, sources: [{ id: 'broker', label: 'Synthetic', asOf: emptySnapshot.asOf, status: 'ok' }], accounts: [account] };
+ for (const custodyCountry of [undefined, 'CH', 'CO', 'US', 'unknown'])
+  expect(snapshotSchema.safeParse({ ...valid, accounts: [{ ...account, custodyCountry }] }).success).toBe(true);
+ for (const custodyCountry of ['', 'ch', 'Switzerland', 'ZZ', '__proto__', null])
+  expect(snapshotSchema.safeParse({ ...valid, accounts: [{ ...account, custodyCountry }] }).success).toBe(false);
+ expect(snapshotSchema.safeParse({ ...valid, accounts: [{ ...account, issuerCountry: 'CH' }] }).success).toBe(false);
+});
 describe('private snapshot schema' , () => {
     it('accepts an honest empty snapshot but rejects ownership fields', () => {
         expect(snapshotSchema.safeParse(emptySnapshot).success).toBe(true);

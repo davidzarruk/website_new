@@ -109,7 +109,7 @@ it('shows no donut slices for an all-debt snapshot and keeps the signed total',a
  repo.load.mockResolvedValueOnce({snapshot:{...empty,sources:[{id:'s',label:'Synthetic',asOf:empty.asOf,status:'ok'}],accounts:[{id:'a',label:'Synthetic',balanceScope:'a',ownership:'joint',sourceId:'s',holdings:[],cash:[{currency:'USD',amount:-50}]}]},importedAt:empty.asOf});
  await mount();
  expect(div.querySelectorAll('.recharts-pie-sector')).toHaveLength(0);
- expect(div.textContent?.match(/Sin valores positivos incluidos para graficar/g)).toHaveLength(2);
+ expect(div.textContent?.match(/Sin valores positivos incluidos para graficar/g)).toHaveLength(4);
  expect(div.querySelector('tbody tr')?.textContent).toContain('-US$');
  expect(div.textContent).toContain('Deuda / posiciones negativas incluidas');
 });

@@ -16,14 +16,15 @@ export const syntheticSnapshot = snapshotSchema.parse({
 });
 
 export const syntheticPortfolio = snapshotSchema.parse({
-  version: 1, asOf: '2026-11-20T12:00:00Z', baseCurrency: 'USD', fx: { EUR: 1.1 },
+  version: 1, asOf: '2026-11-20T12:00:00Z', baseCurrency: 'USD', fx: { EUR: 1.1, COP: 0.00025 },
   sources: [{ id: 'synthetic', label: 'Fuente de prueba', asOf: '2026-11-20T12:00:00Z', status: 'ok' }],
   accounts: [0, 1].map(i => ({
+    custodyCountry: i ? undefined : 'CH',
     id: `synthetic-${i}`, label: `Cuenta de prueba ${i}`, ownership: 'joint', sourceId: 'synthetic', balanceScope: `scope-${i}`,
     holdings: [
       { symbol: i ? 'CRYPTO/BTC' : 'BTC', name: 'Bitcoin', assetClass: 'Cripto', currency: 'USD', quantity: 0.01, marketValue: 1000, costBasis: i ? null : 800 },
       { symbol: i ? 'CRYPTO/ETH' : 'ETH', name: 'Ethereum', assetClass: 'Cripto', currency: 'USD', quantity: 0.1, marketValue: 300, costBasis: null },
-      { symbol: 'SPY', name: 'S&P 500 · SPY', assetClass: 'ETF', currency: 'USD', quantity: 3, marketValue: 1500, costBasis: 1200 },
+      { symbol: 'SPY', name: 'S&P 500 · SPY', assetClass: 'ETF', currency: i ? 'EUR' : 'USD', quantity: 3, marketValue: 1500, costBasis: 1200 },
       { symbol: 'QQQ', name: 'Nasdaq · QQQ', assetClass: 'ETF', currency: 'USD', quantity: 1, marketValue: 400, costBasis: null },
     ],
     cash: [{ currency: 'USD', amount: i ? -50 : 250 }],

@@ -25,6 +25,18 @@ export function aggregateAssets(
   accounts = s.accounts
 ) {
   const assets = new Map<string, Asset>();
+  // Net the same economic asset within each original denomination/location first.
+  const currencyBuckets = new Map<string, Map<string, number>>();
+  const custodyBuckets = new Map<string, Map<string, number>>();
+  const addBucket = (buckets: Map<string, Map<string, number>>, name: string, key: string, value: number) => {
+    const bucket = buckets.get(name) ?? new Map<string, number>();
+    bucket.set(key, (bucket.get(key) ?? 0) + value);
+    buckets.set(name, bucket);
+  };
+  const allocation = (buckets: Map<string, Map<string, number>>) => [...buckets]
+    .map(([name, values]) => ({ name, value: [...values.values()].reduce((sum, value) => sum + Math.max(0, value), 0) }))
+    .filter(entry => entry.value > 0);
+
   const exclusions = new Set<string>();
   const baseRate = base === s.baseCurrency ? 1 : s.fx[base];
   let debt = 0,
@@ -116,6 +128,8 @@ export function aggregateAssets(
         );
         continue;
       }
+      addBucket(currencyBuckets, holding.currency, key, value);
+      addBucket(custodyBuckets, !account.custodyCountry || account.custodyCountry === 'unknown' ? 'Sin país informado' : account.custodyCountry, key, value);
       asset.included++;
       asset.quantity += holding.quantity;
       includedTotal += value;
@@ -145,6 +159,8 @@ export function aggregateAssets(
   rows.sort((a, b) => b.value - a.value || a.symbol.localeCompare(b.symbol));
   return {
     assets: rows,
+    currencies: allocation(currencyBuckets),
+    custodyCountries: allocation(custodyBuckets),
     total: includedTotal,
     pnl: includedPnl,
     debt,

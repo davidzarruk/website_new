@@ -58,7 +58,7 @@ for (const width of [320, 390]) {
     expect(scrollers).toEqual([{ overflow: 'auto', scrollable: true, moved: true }]);
     await expect(page.getByRole('combobox')).toHaveValue('USD');
     await expect(page.getByRole('region', { name: 'Tabla consolidada de activos' })).toBeVisible();
-    await expect(page.locator('.recharts-pie-sector')).toHaveCount(2);
+    await expect(page.locator('.recharts-pie-sector')).toHaveCount(4);
     await page.getByText('Fuentes, advertencias y detalle por ubicación', { exact: true }).click();
     await expect(page.getByRole('heading', { name: 'Consolidado · todas las cuentas' })).toBeVisible();
     await expectContained(page);
@@ -76,12 +76,24 @@ for (const width of [320, 390]) {
     }
     await expect(page.locator('tbody tr').filter({ has: page.getByText('BTC', { exact: true }) })).toContainText('Parcial · solo costo conocido');
     await expect(page.getByRole('region', { name: 'Distribución por activo', exact: true }).getByRole('listitem')).toHaveCount(5);
-    await expect(page.locator('.recharts-pie-sector')).toHaveCount(8);
+    const currencies = page.getByRole('region', { name: 'Distribución por moneda', exact: true });
+    await expect(currencies.getByRole('listitem')).toHaveCount(2);
+    await expect(currencies.getByRole('listitem').filter({ has: page.getByText('EUR', { exact: true }) })).toContainText('1.650,00');
+    const custody = page.getByRole('region', { name: 'País de custodia', exact: true });
+    await expect(custody).toContainText('Sin país informado');
+    await expect(custody).toContainText('No representa exposición económica');
+    await expect(custody.getByRole('listitem')).toHaveCount(2);
+    await expect(custody.getByRole('listitem').filter({ hasText: 'CH' })).toContainText('3.450,00');
+    await expect(page.locator('.recharts-pie-sector')).toHaveCount(12);
     await expectContained(page);
     expect(await page.locator('details').evaluateAll(nodes => nodes.every(n => !n.hasAttribute('open')))).toBe(true);
     await page.screenshot({ path: testInfo.outputPath(`consolidated-${width}.png`), fullPage: true });
     await page.getByRole('combobox').selectOption('EUR');
     await expect(page.getByText('Valor neto incluido · EUR', { exact: true })).toBeVisible();
+    await expect(currencies.getByRole('listitem').filter({ has: page.getByText('EUR', { exact: true }) })).toContainText('1.500,00');
+    await page.getByRole('combobox').selectOption('COP');
+    await expect(currencies.getByRole('listitem').filter({ has: page.getByText('EUR', { exact: true }) })).toContainText(/6\.600\.000(?:,00)?$/);
+    await expect(custody.getByRole('listitem').filter({ hasText: 'CH' })).toContainText(/13\.800\.000(?:,00)?$/);
     await expectContained(page);
     await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
     await expectContained(page);

@@ -43,6 +43,7 @@ type Snapshot = {
   ownership: 'laura' | 'joint' | 'david';
   sourceId: string; // references sources.id
   balanceScope: string; // unique underlying economic balance, stable across collectors
+  custodyCountry?: string; // explicit ISO 3166-1 alpha-2 uppercase account/custody location, or 'unknown'
   holdings: Array<{
    symbol: string; name: string; assetClass: string;
    currency: string; // monetary valuation denomination, NOT asset ticker
@@ -62,7 +63,11 @@ Represent BTC/USDT/etc. as holdings valued in a monetary denomination such as US
 
 Display defaults to USD independently of the snapshot base. Conversion uses `(currency → snapshot base) / (display currency → snapshot base)`; unavailable source or missing FX balances are excluded from both included quantities and money, with a partial-total warning. No conversion is invented. Per-asset PnL is explicitly partial when any costs/balances are missing, and unknown when none are known. Known-cost PnL is not investment performance.
 
-The primary view has one value-sorted economic-asset table and two accessible donut/legend panels (asset and class). Positive allocation is netted per economic asset first; gross signed negative balances remain disclosed separately. More than six positive categories are displayed as the five largest plus “Otros activos”; the complete table remains available. Original-currency account/source details are collapsed, not the default organization. Import and preview still require explicit save confirmation.
+The primary view has one value-sorted economic-asset table and four accessible donut/legend panels (asset, class, original monetary denomination, and **País de custodia**). Asset/class positive allocation is netted per economic asset first; gross signed negative balances remain disclosed separately. More than six positive categories are displayed as the five largest plus “Otros activos”; the complete holdings table remains available. Original-currency account/source details are collapsed, not the default organization. Import and preview still require explicit save confirmation.
+
+Currency categories retain each holding/cash balance's original `currency` before converting amounts to the selected display currency through snapshot FX. This is reported monetary denomination, **not** inferred underlying economic/currency exposure (e.g. a USD-valued crypto holding remains USD-denominated here). Custody is exclusively the explicit account `custodyCountry`: uppercase ISO2 or `unknown`, optional for backward-compatible version-1 snapshots. Missing/unknown location is grouped as **Sin país informado**. It is account/custody location, **not** issuer domicile, nationality, or geographic economic exposure. Never derive it from broker names, owner, currency, or an instrument ticker. A Swiss account can hold non-Swiss assets.
+
+Both new allocations net each economic asset within each dimension bucket, then sum only positive asset/bucket values. Negative slices are never drawn; debt stays in the signed net total and the separate gross debt disclosure. Their positive denominators can differ from asset/class charts when an instrument offsets across locations/currencies. Unavailable sources, missing FX and nonfinite conversions use the same exclusions as the consolidated table; unassigned countries are not excluded. Empty allocations show an explicit no-positive-values message. Legends show percentages and converted amounts; selecting USD/EUR/COP changes amounts, never original currency or custody labels.
 
 ## Validation boundaries
 

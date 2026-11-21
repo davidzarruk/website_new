@@ -22,8 +22,10 @@ function Allocation({
   title,
   entries,
   money,
+  note,
 }: {
   title: string;
+  note?: string;
   entries: { name: string; value: number }[];
   money: (n: number) => string;
 }) {
@@ -45,7 +47,7 @@ function Allocation({
     <section className={panel} aria-label={title}>
       <h3 className="font-heading text-xl">{title}</h3>
       <p className="mt-1 text-xs text-muted-foreground">
-        Sobre valores positivos incluidos
+        {note ?? 'Sobre valores positivos incluidos'}
       </p>
       {total > 0 ? (
         <>
@@ -213,6 +215,18 @@ export default function FinanceOverview({
           title="Distribución por clase"
           entries={[...classes].map(([name, value]) => ({ name, value }))}
           money={money}
+        />
+        <Allocation
+          title="Distribución por moneda"
+          entries={v.currencies}
+          money={money}
+          note={`Denominación original de posiciones y efectivo, no moneda de visualización ni exposición subyacente. Valores convertidos a ${base}; positivos netos por activo dentro de cada moneda. Deuda excluida de las porciones.`}
+        />
+        <Allocation
+          title="País de custodia"
+          entries={v.custodyCountries}
+          money={money}
+          note={`Ubicación declarada de la cuenta/custodia (ISO2). No representa exposición económica ni domicilio del emisor. Valores en ${base}; positivos netos por activo dentro de cada país. Sin inferencias por moneda o titular; deuda excluida de las porciones.`}
         />
       </div>
       <section className={panel}>

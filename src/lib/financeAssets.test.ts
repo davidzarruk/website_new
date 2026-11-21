@@ -100,6 +100,27 @@ it('keeps unrecognized symbols literal, including dictionary keys and cash-like 
     v.assets.find((a) => a.assetClass === 'Efectivo / deuda')
   ).toMatchObject({ quantity: 3, value: 3 });
 });
+it('preserves original denomination and explicit custody across accounts before display conversion', () => {
+ const s = snapshot([h('SPY', 'EUR')]);
+ s.fx.COP = 0.00025;
+ s.accounts[0].custodyCountry = 'CH';
+ s.accounts[0].cash = [{ currency: 'USD', amount: 3 }, { currency: 'EUR', amount: -2 }];
+ s.accounts[1].holdings = [h('SPY') as Snapshot['accounts'][number]['holdings'][number]];
+ // The same economic instrument must retain both location and denomination.
+ expect(aggregateAssets(s)).toMatchObject({
+  currencies: [{ name: 'EUR', value: 20 }, { name: 'USD', value: 13 }],
+  custodyCountries: [{ name: 'CH', value: 23 }, { name: 'Sin país informado', value: 10 }],
+  debt: 4,
+ });
+ expect(aggregateAssets(s, 'COP').currencies).toEqual([{ name: 'EUR', value: 80000 }, { name: 'USD', value: 52000 }]);
+ expect(aggregateAssets(s, 'EUR').custodyCountries).toEqual([{ name: 'CH', value: 11.5 }, { name: 'Sin país informado', value: 5 }]);
+ s.accounts[1].custodyCountry = 'unknown';
+ expect(aggregateAssets(s).custodyCountries[1].name).toBe('Sin país informado');
+ s.fx = {};
+ expect(aggregateAssets(s).currencies).toEqual([{ name: 'USD', value: 13 }]);
+ s.sources[0].status = 'error';
+ expect(aggregateAssets(s)).toMatchObject({ currencies: [], custodyCountries: [] });
+});
 it('excludes non-finite conversions rather than producing infinite totals', () => {
   const s = snapshot([h('SPY', 'EUR')]);
   s.fx = { EUR: 1e15 };
